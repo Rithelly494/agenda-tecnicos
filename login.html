@@ -114,6 +114,13 @@
     </div>
 
     <script>
+        // Criar usuário mestre se não existir
+        let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+        if (!usuarios.some(u => u.username === "admin")) {
+            usuarios.push({ username: "admin", password: "102030", tipo: "admin" });
+            localStorage.setItem("usuarios", JSON.stringify(usuarios));
+        }
+
         document.getElementById("loginForm").addEventListener("submit", function(event) {
             event.preventDefault();
             const username = document.getElementById("username").value;
@@ -127,6 +134,9 @@
 
             if (user) {
                 alert("Login bem-sucedido!");
+
+                // Salvar o usuário logado na sessão
+                sessionStorage.setItem("usuarioLogado", JSON.stringify(user));
 
                 // Redireciona para o painel correto
                 if (user.tipo === "admin") {
