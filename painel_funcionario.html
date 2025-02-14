@@ -5,14 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel do Funcionário</title>
     <link rel="stylesheet" href="styles.css">
-    <script defer src="script.js"></script>
 </head>
 <body>
-    <h1>Painel do Funcionário</h1>
-    
-    <h2>Adicionar Novo Serviço</h2>
-    <form id="formServico">
-        <label>Tipo de Serviço:
+    <div class="container">
+        <h2>Painel do Funcionário</h2>
+        <h3>Adicionar Novo Serviço</h3>
+        <form id="formServico">
+            <label>Tipo de Serviço:</label>
             <select id="tipoServico" required>
                 <option value="">Selecione</option>
                 <option value="Instalação">Instalação</option>
@@ -22,9 +21,8 @@
                 <option value="Entrega de Carnê">Entrega de Carnê</option>
                 <option value="Passar o Cartão">Passar o Cartão</option>
             </select>
-        </label>
-        
-        <label>Empresa:
+            
+            <label>Empresa:</label>
             <select id="empresa" required>
                 <option value="">Selecione</option>
                 <option value="JC Horizonte">JC Horizonte</option>
@@ -32,11 +30,12 @@
                 <option value="Defend">Defend</option>
                 <option value="Rastremax">Rastremax</option>
             </select>
-        </label>
-        
-        <label>Escolha a Data: <input type="date" id="data" required></label>
-        <label>Escolha o Horário: 
-            <select id="horario" required>
+            
+            <label>Escolha a Data:</label>
+            <input type="date" id="dataServico" required>
+            
+            <label>Escolha o Horário:</label>
+            <select id="horarioServico" required>
                 <option value="">Selecione um horário</option>
                 <option value="08:00">08:00</option>
                 <option value="09:00">09:00</option>
@@ -48,34 +47,47 @@
                 <option value="16:00">16:00</option>
                 <option value="17:00">17:00</option>
             </select>
-        </label>
-        
-        <label>Técnico Responsável:
+            
+            <label>Técnico Responsável:</label>
             <select id="tecnico" required>
                 <option value="">Selecione</option>
                 <option value="Bruno">Bruno</option>
                 <option value="Cleber">Cleber</option>
                 <option value="Romario">Romario</option>
             </select>
-        </label>
+            
+            <label>Nome do Cliente:</label>
+            <input type="text" id="nomeCliente" placeholder="Nome e Sobrenome" required>
+            
+            <label>Telefone:</label>
+            <input type="tel" id="telefone" placeholder="(99) 99999-9999" required>
+            
+            <label>Endereço:</label>
+            <input type="text" id="endereco" placeholder="Rua, Número, Bairro, Cidade" required>
+            
+            <label>Veículo:</label>
+            <input type="text" id="veiculo" placeholder="Modelo - Placa - Ano" required>
+            
+            <button type="submit">Adicionar Serviço</button>
+        </form>
+        
+        <h3>Agenda de Serviços</h3>
+        <button onclick="atualizarAgenda()">Atualizar Agenda</button>
+        <table>
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Horário</th>
+                    <th>Técnico</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="tabelaAgenda">
+                <!-- Aqui os serviços serão inseridos -->
+            </tbody>
+        </table>
+    </div>
 
-        <label>Nome do Cliente: <input type="text" id="cliente" placeholder="Nome e Sobrenome" required></label>
-        <label>Telefone: <input type="tel" id="telefone" placeholder="(99) 99999-9999" required></label>
-        <label>Endereço: <input type="text" id="endereco" placeholder="Rua, Número, Bairro, Cidade" required></label>
-        <label>Veículo: <input type="text" id="veiculo" placeholder="Modelo - Placa - Ano" required></label>
-
-        <button type="submit">Adicionar Serviço</button>
-    </form>
-
-    <h2>Agenda de Serviços</h2>
-    <button onclick="atualizarAgenda()">Atualizar Agenda</button>
-    <table id="agendaServicos">
-        <tr>
-            <th>Data</th>
-            <th>Horário</th>
-            <th>Técnico</th>
-            <th>Status</th>
-        </tr>
-    </table>
+    <script src="script.js"></script>
 </body>
 </html>
