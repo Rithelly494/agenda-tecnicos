@@ -9,8 +9,6 @@
 <body>
     <div class="container">
         <h2>Painel do Funcionário</h2>
-        
-        <!-- Lista de serviços adicionados pelo funcionário -->
         <table>
             <thead>
                 <tr>
@@ -24,53 +22,55 @@
                     <th>Ações</th>
                 </tr>
             </thead>
-            <tbody id="listaServicosFuncionario">
-                <!-- Serviços adicionados serão listados aqui -->
+            <tbody>
+                <tr>
+                    <td>Instalação</td>
+                    <td>JC Rastreamento</td>
+                    <td>15/02/2025</td>
+                    <td>10:00</td>
+                    <td>João Silva</td>
+                    <td>Carro - ABC1234</td>
+                    <td class="status-reagendado">Reagendado</td>
+                    <td><button class="btn-editar" onclick="abrirModal()">Editar</button></td>
+                </tr>
+                <tr>
+                    <td>Manutenção</td>
+                    <td>JC Rastreamento</td>
+                    <td>16/02/2025</td>
+                    <td>14:00</td>
+                    <td>Ana Souza</td>
+                    <td>Moto - XYZ5678</td>
+                    <td class="status-pendente">Pendente</td>
+                    <td>-</td>
+                </tr>
             </tbody>
         </table>
     </div>
-
-    <script src="script.js"></script>
+    
+    <!-- Modal para Edição -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="fecharModal()">&times;</span>
+            <h2>Editar Agendamento</h2>
+            <label for="novaData">Nova Data:</label>
+            <input type="date" id="novaData">
+            <label for="novoHorario">Novo Horário:</label>
+            <input type="time" id="novoHorario">
+            <button onclick="salvarEdicao()">Salvar</button>
+        </div>
+    </div>
 
     <script>
-        function editarReagendamento(servicoId) {
-            let novaData = prompt('Digite a nova data (AAAA-MM-DD):');
-            let novoHorario = prompt('Digite o novo horário (HH:MM):');
-            if (novaData && novoHorario) {
-                alert('Serviço reagendado para: ' + novaData + ' às ' + novoHorario);
-                // Aqui você pode implementar a lógica para salvar no banco de dados
-            } else {
-                alert('Reagendamento cancelado.');
-            }
+        function abrirModal() {
+            document.getElementById("modal").style.display = "block";
         }
-
-        function carregarServicosFuncionario() {
-            let servicos = [
-                { id: 1, tipo: "Instalação", empresa: "JC Rastreamento", data: "15/02/2025", hora: "10:00", cliente: "João Silva", veiculo: "Carro - ABC1234", status: "Reagendado" },
-                { id: 2, tipo: "Manutenção", empresa: "JC Rastreamento", data: "16/02/2025", hora: "14:00", cliente: "Ana Souza", veiculo: "Moto - XYZ5678", status: "Pendente" }
-            ];
-            
-            let tabela = document.getElementById("listaServicosFuncionario");
-            tabela.innerHTML = "";
-            
-            servicos.forEach(servico => {
-                let row = `<tr>
-                    <td>${servico.tipo}</td>
-                    <td>${servico.empresa}</td>
-                    <td>${servico.data}</td>
-                    <td>${servico.hora}</td>
-                    <td>${servico.cliente}</td>
-                    <td>${servico.veiculo}</td>
-                    <td>${servico.status}</td>
-                    <td>
-                        ${servico.status === "Reagendado" ? `<button onclick='editarReagendamento(${servico.id})'>Editar</button>` : "-"}
-                    </td>
-                </tr>`;
-                tabela.innerHTML += row;
-            });
+        function fecharModal() {
+            document.getElementById("modal").style.display = "none";
         }
-        
-        window.onload = carregarServicosFuncionario;
+        function salvarEdicao() {
+            alert("Agendamento atualizado com sucesso!");
+            fecharModal();
+        }
     </script>
 </body>
 </html>
