@@ -5,19 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel do Funcionário</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
 </head>
 <body>
     <div class="container">
-        <h2>Painel do Funcionário</h2>
+        <h1>Painel do Funcionário</h1>
         <div class="tabs">
-            <button class="tab-button active" onclick="openTab('agenda')">Agenda de Serviços</button>
-            <button class="tab-button" onclick="openTab('realizados')">Agendamentos Realizados</button>
+            <button class="tab-button active" onclick="openTab(event, 'agenda')">Agenda de Serviços</button>
+            <button class="tab-button" onclick="openTab(event, 'realizados')">Agendamentos Realizados</button>
         </div>
         
-        <!-- ABA: Agenda de Serviços -->
         <div id="agenda" class="tab-content active">
-            <h3>Adicionar Novo Serviço</h3>
-            <form id="formServico">
+            <h2>Adicionar Novo Serviço</h2>
+            <form id="service-form">
                 <label>Tipo de Serviço:</label>
                 <select>
                     <option>Instalação</option>
@@ -27,6 +27,7 @@
                     <option>Entrega de Carnê</option>
                     <option>Passar o Cartão</option>
                 </select>
+                
                 <label>Empresa:</label>
                 <select>
                     <option>JC Horizonte</option>
@@ -34,8 +35,10 @@
                     <option>Defend</option>
                     <option>Rastremax</option>
                 </select>
+                
                 <label>Data:</label>
                 <input type="date">
+                
                 <label>Horário:</label>
                 <select>
                     <option>08:00</option>
@@ -48,31 +51,36 @@
                     <option>16:00</option>
                     <option>17:00</option>
                 </select>
+                
                 <label>Técnico Responsável:</label>
                 <select>
                     <option>Bruno</option>
                     <option>Cleber</option>
                     <option>Romario</option>
                 </select>
+                
                 <label>Nome do Cliente:</label>
                 <input type="text" placeholder="Nome e Sobrenome" required>
+                
                 <label>Telefone:</label>
-                <input type="tel" placeholder="(99) 99999-9999" required>
+                <input type="tel" placeholder="(85) 99999-9999" required>
+                
                 <label>Endereço:</label>
                 <input type="text" placeholder="Rua, Número, Bairro, Cidade" required>
+                
                 <label>Modelo do Veículo:</label>
                 <input type="text" placeholder="Modelo" required>
+                
                 <label>Ano do Veículo:</label>
                 <input type="number" placeholder="Ano" required>
+                
                 <label>Placa do Veículo (Opcional):</label>
                 <input type="text" placeholder="Placa">
+                
                 <button type="submit">Adicionar Serviço</button>
             </form>
-        </div>
-        
-        <!-- ABA: Agendamentos Realizados -->
-        <div id="realizados" class="tab-content">
-            <h3>Agendamentos Realizados</h3>
+            
+            <h2>Agenda de Serviços</h2>
             <table>
                 <thead>
                     <tr>
@@ -82,21 +90,25 @@
                         <th>Status</th>
                     </tr>
                 </thead>
-                <tbody id="listaRealizados">
-                    <!-- Os serviços realizados serão listados aqui -->
-                </tbody>
+                <tbody id="agenda-table"></tbody>
+            </table>
+        </div>
+        
+        <div id="realizados" class="tab-content">
+            <h2>Agendamentos Realizados</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Horário</th>
+                        <th>Técnico</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="realizados-table"></tbody>
             </table>
         </div>
     </div>
-
-    <script>
-        function openTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.tab-button').forEach(button => button.classList.remove('active'));
-            document.getElementById(tabName).classList.add('active');
-            event.currentTarget.classList.add('active');
-        }
-    </script>
 </body>
 </html>
 
