@@ -43,19 +43,19 @@
             </div>
 
             <div class="form-group">
-                <label for="horario">Escolha o Horário:</label>
-                <select id="horario" required>
-                    <option value="">Selecione um horário</option>
-                </select>
-            </div>
-
-            <div class="form-group">
                 <label for="tecnico">Técnico Responsável:</label>
                 <select id="tecnico" required>
                     <option value="">Selecione</option>
                     <option value="Bruno">Bruno</option>
                     <option value="Cleber">Cleber</option>
                     <option value="Romário">Romário</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="horario">Escolha o Horário:</label>
+                <select id="horario" required>
+                    <option value="">Selecione um horário</option>
                 </select>
             </div>
 
@@ -107,17 +107,37 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const horariosDisponiveis = ["08:00", "09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00", "17:00"];
+            const servicosAgendados = [];
             const form = document.getElementById("form-agendamento");
             const listaServicos = document.getElementById("lista-servicos");
             const horarioSelect = document.getElementById("horario");
+            const tecnicoSelect = document.getElementById("tecnico");
+            const dataInput = document.getElementById("data");
 
-            // Preenche os horários disponíveis no select
-            horariosDisponiveis.forEach(horario => {
-                const option = document.createElement("option");
-                option.value = horario;
-                option.textContent = horario;
-                horarioSelect.appendChild(option);
-            });
+            function atualizarHorariosDisponiveis() {
+                const tecnicoSelecionado = tecnicoSelect.value;
+                const dataSelecionada = dataInput.value;
+                horarioSelect.innerHTML = '<option value="">Selecione um horário</option>';
+
+                horariosDisponiveis.forEach(horario => {
+                    const ocupado = servicosAgendados.some(servico =>
+                        servico.tecnico === tecnicoSelecionado &&
+                        servico.data === dataSelecionada &&
+                        servico.horario === horario
+                    );
+
+                    const option = document.createElement("option");
+                    option.value = horario;
+                    option.textContent = horario;
+                    if (ocupado) {
+                        option.disabled = true;
+                    }
+                    horarioSelect.appendChild(option);
+                });
+            }
+
+            tecnicoSelect.addEventListener("change", atualizarHorariosDisponiveis);
+            dataInput.addEventListener("change", atualizarHorariosDisponiveis);
 
             form.addEventListener("submit", function(event) {
                 event.preventDefault();
@@ -137,7 +157,6 @@
                     return;
                 }
 
-                // Cria nova linha na tabela
                 const newRow = document.createElement("tr");
                 newRow.innerHTML = `
                     <td>${tipo}</td>
@@ -152,9 +171,9 @@
                 `;
 
                 listaServicos.appendChild(newRow);
-
-                // Limpa o formulário após adicionar
+                servicosAgendados.push({ tipo, empresa, data, horario, tecnico, nome, telefone, endereco, veiculo });
                 form.reset();
+                atualizarHorariosDisponiveis();
             });
         });
 
@@ -163,50 +182,6 @@
         }
     </script>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            text-align: center;
-        }
-
-        .container {
-            width: 80%;
-            margin: auto;
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px gray;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            font-weight: bold;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border-radius: 5px;
-            border: 1px solid gray;
-        }
-
-        button {
-            padding: 10px;
-            background-color: orange;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: darkorange;
-        }
-    </style>
-
 </body>
 </html>
+
