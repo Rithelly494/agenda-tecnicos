@@ -3,113 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Agenda Técnicos</title>
+    <title>Login - JC Rastreamento</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: 'Montserrat', sans-serif;
         }
 
         body {
             display: flex;
             justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f3f3f3;
-        }
-
-        .login-container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-        }
-
-        .login-container h2 {
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        .login-container label {
-            display: block;
-            text-align: left;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-
-        .login-container input {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        .login-container button {
-            width: 100%;
-            padding: 10px;
-            margin-top: 15px;
-            background-color: #007bff;
-            border: none;
-            color: white;
-            font-size: 18px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        .login-container button:hover {
-            background-color: #0056b3;
-        }
-
-        .error-message {
-            color: red;
-            margin-top: 10px;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="login-container">
-        <h2>Login</h2>
-        <form id="loginForm">
-            <label for="username">Usuário:</label>
-            <input type="text" id="username" placeholder="Digite seu usuário" required>
-
-            <label for="password">Senha:</label>
-            <input type="password" id="password" placeholder="Digite sua senha" required>
-
-            <button type="submit">Entrar</button>
-        </form>
-        <p id="errorMessage" class="error-message"></p>
-    </div>
-
-    <script>
-        document.getElementById("loginForm").addEventListener("submit", function(event) {
-            event.preventDefault();
-            const username = document.getElementById("username").value;
-            const password = document.getElementById("password").value;
-
-            // Usuários cadastrados (exemplo)
-            const users = {
-                "admin": "admin123",
-                "tecnico1": "senha123",
-                "tecnico2": "senha456"
-            };
-
-            if (users[username] && users[username] === password) {
-                alert("Login bem-sucedido!");
-                window.location.href = "index.html"; // Redireciona para a agenda
-            } else {
-                document.getElementById("errorMessage").innerText = "Usuário ou senha incorretos!";
-            }
-        });
-    </script>
-
-</body>
-</html>
+            align-items: center
