@@ -1,0 +1,1 @@
+console.log("Configuração do Banco de Dados!");
