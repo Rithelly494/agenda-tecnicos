@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Agenda Técnicos</title>
+</head>
+<body>
+    <h2>Login</h2>
+    <form id="loginForm">
+        <label for="username">Usuário:</label>
+        <input type="text" id="username" required>
+        <br>
+        <label for="password">Senha:</label>
+        <input type="password" id="password" required>
+        <br>
+        <button type="submit">Entrar</button>
+    </form>
+    <p id="errorMessage" style="color: red;"></p>
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            // Usuários cadastrados (exemplo)
+            const users = {
+                "admin": "admin123",
+                "tecnico1": "senha123",
+                "tecnico2": "senha456"
+            };
+
+            if (users[username] && users[username] === password) {
+                alert("Login bem-sucedido!");
+                window.location.href = "index.html"; // Redireciona para a agenda
+            } else {
+                document.getElementById("errorMessage").innerText = "Usuário ou senha incorretos!";
+            }
+        });
+    </script>
+</body>
+</html>
