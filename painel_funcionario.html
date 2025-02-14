@@ -5,6 +5,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel do Funcionário</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            background: white;
+            padding: 20px;
+            margin: auto;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2, h3 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .form-group {
+            width: 48%;
+            margin-bottom: 10px;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            background-color: orange;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: darkorange;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: orange;
+            color: white;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -138,22 +205,11 @@
             form.addEventListener("submit", function(event) {
                 event.preventDefault();
 
-                const tipo = document.getElementById("tipo").value;
-                const empresa = document.getElementById("empresa").value;
-                const data = document.getElementById("data").value;
-                const horario = document.getElementById("horario").value;
-                const tecnico = document.getElementById("tecnico").value;
-                const nome = document.getElementById("nome").value;
-                const telefone = document.getElementById("telefone").value;
-                const endereco = document.getElementById("endereco").value;
-                const veiculo = document.getElementById("veiculo").value;
+                const data = dataInput.value;
+                const horario = horarioSelect.value;
+                const tecnico = tecnicoSelect.value;
 
-                if (!tipo || !empresa || !data || !horario || !tecnico || !nome || !telefone || !endereco || !veiculo) {
-                    alert("Por favor, preencha todos os campos.");
-                    return;
-                }
-
-                servicosAgendados.push({ tipo, empresa, data, horario, tecnico, nome, telefone, endereco, veiculo });
+                servicosAgendados.push({ data, horario, tecnico });
                 atualizarAgenda();
                 form.reset();
                 atualizarHorariosDisponiveis();
@@ -163,18 +219,12 @@
                 listaServicos.innerHTML = "";
                 servicosAgendados.forEach(servico => {
                     const row = document.createElement("tr");
-                    row.innerHTML = `
-                        <td>${servico.data}</td>
-                        <td>${servico.horario}</td>
-                        <td>${servico.tecnico}</td>
-                        <td>Pendente</td>
-                    `;
+                    row.innerHTML = `<td>${servico.data}</td><td>${servico.horario}</td><td>${servico.tecnico}</td><td>Pendente</td>`;
                     listaServicos.appendChild(row);
                 });
             }
         });
     </script>
-
 </body>
 </html>
 
