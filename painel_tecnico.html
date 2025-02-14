@@ -4,105 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel do Técnico</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        h1 {
-            color: #ff8c00;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #ff8c00;
-            color: white;
-        }
-
-        .status-btn {
-            padding: 5px 10px;
-            border: none;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-
-        .realizado {
-            background-color: green;
-            color: white;
-        }
-
-        .pendente {
-            background-color: red;
-            color: white;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
     <div class="container">
-        <h1>Painel do Técnico</h1>
+        <h2>Painel do Técnico</h2>
+        
+        <!-- Lista de serviços atribuídos ao técnico -->
         <table>
             <thead>
                 <tr>
-                    <th>Cliente</th>
+                    <th>Tipo de Serviço</th>
+                    <th>Empresa</th>
                     <th>Data</th>
-                    <th>Endereço</th>
+                    <th>Hora</th>
+                    <th>Cliente</th>
+                    <th>Veículo</th>
                     <th>Status</th>
+                    <th>Observações</th>
+                    <th>Ações</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>João Silva</td>
-                    <td>15/02/2025</td>
-                    <td>Rua A, 123</td>
-                    <td><button class="status-btn pendente" onclick="alterarStatus(this)">Pendente</button></td>
-                </tr>
-                <tr>
-                    <td>Ana Souza</td>
-                    <td>16/02/2025</td>
-                    <td>Rua B, 456</td>
-                    <td><button class="status-btn realizado" onclick="alterarStatus(this)">Realizado</button></td>
-                </tr>
+            <tbody id="listaServicosTecnico">
+                <!-- Serviços atribuídos serão listados aqui -->
             </tbody>
         </table>
     </div>
 
+    <script src="script.js"></script>
+
     <script>
-        function alterarStatus(botao) {
-            if (botao.classList.contains("pendente")) {
-                botao.classList.remove("pendente");
-                botao.classList.add("realizado");
-                botao.innerText = "Realizado";
+        function atualizarStatus(servicoId, novoStatus) {
+            if (novoStatus === 'Reagendado') {
+                let precisaReagendar = confirm('Este serviço precisa ser reagendado?');
+                if (precisaReagendar) {
+                    alert('O serviço foi marcado como necessitando de reagendamento.');
+                    // Aqui você pode implementar a lógica para salvar no banco de dados
+                } else {
+                    alert('Nenhuma alteração realizada.');
+                }
             } else {
-                botao.classList.remove("realizado");
-                botao.classList.add("pendente");
-                botao.innerText = "Pendente";
+                alert('Status atualizado para: ' + novoStatus);
+                // Aqui você pode implementar a lógica para salvar no banco de dados
             }
         }
     </script>
-
 </body>
 </html>

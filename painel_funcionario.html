@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Funcionário</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Painel do Funcionário</h2>
+        
+        <!-- Lista de serviços adicionados pelo funcionário -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Tipo de Serviço</th>
+                    <th>Empresa</th>
+                    <th>Data</th>
+                    <th>Hora</th>
+                    <th>Cliente</th>
+                    <th>Veículo</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="listaServicosFuncionario">
+                <!-- Serviços adicionados serão listados aqui -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="script.js"></script>
+
+    <script>
+        function editarReagendamento(servicoId) {
+            let novaData = prompt('Digite a nova data (AAAA-MM-DD):');
+            let novoHorario = prompt('Digite o novo horário (HH:MM):');
+            if (novaData && novoHorario) {
+                alert('Serviço reagendado para: ' + novaData + ' às ' + novoHorario);
+                // Aqui você pode implementar a lógica para salvar no banco de dados
+            } else {
+                alert('Reagendamento cancelado.');
+            }
+        }
+
+        function carregarServicosFuncionario() {
+            let servicos = [
+                { id: 1, tipo: "Instalação", empresa: "JC Rastreamento", data: "15/02/2025", hora: "10:00", cliente: "João Silva", veiculo: "Carro - ABC1234", status: "Reagendado" },
+                { id: 2, tipo: "Manutenção", empresa: "JC Rastreamento", data: "16/02/2025", hora: "14:00", cliente: "Ana Souza", veiculo: "Moto - XYZ5678", status: "Pendente" }
+            ];
+            
+            let tabela = document.getElementById("listaServicosFuncionario");
+            tabela.innerHTML = "";
+            
+            servicos.forEach(servico => {
+                let row = `<tr>
+                    <td>${servico.tipo}</td>
+                    <td>${servico.empresa}</td>
+                    <td>${servico.data}</td>
+                    <td>${servico.hora}</td>
+                    <td>${servico.cliente}</td>
+                    <td>${servico.veiculo}</td>
+                    <td>${servico.status}</td>
+                    <td>
+                        ${servico.status === "Reagendado" ? `<button onclick='editarReagendamento(${servico.id})'>Editar</button>` : "-"}
+                    </td>
+                </tr>`;
+                tabela.innerHTML += row;
+            });
+        }
+        
+        window.onload = carregarServicosFuncionario;
+    </script>
+</body>
+</html>
+
