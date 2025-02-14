@@ -3,30 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel de Agendamentos</title>
+    <title>Painel de Controle</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: #ff8c00;
             text-align: center;
             padding: 20px;
         }
 
-        nav {
-            background-color: #ff8c00;
-            padding: 10px;
-            text-align: center;
-        }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin: 0 15px;
-            font-weight: bold;
-        }
-
         .container {
-            max-width: 1200px;
+            max-width: 900px;
             margin: 0 auto;
             background: white;
             padding: 20px;
@@ -34,8 +21,34 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        h1, h2 {
+        h1 {
             color: #ff8c00;
+        }
+
+        .form-container {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f4f4f4;
+            border-radius: 8px;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background: #ff8c00;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #cc7000;
         }
 
         table {
@@ -55,156 +68,136 @@
             color: white;
         }
 
-        .status-btn {
+        .edit-btn {
+            background-color: blue;
+            color: white;
             padding: 5px 10px;
             border: none;
             cursor: pointer;
             border-radius: 4px;
         }
 
-        .realizado {
-            background-color: green;
-            color: white;
-        }
-
-        .pendente {
+        .delete-btn {
             background-color: red;
             color: white;
-        }
-
-        .observacao {
-            width: 100%;
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        form {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        form input, form button {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        form button {
-            background-color: #ff8c00;
-            color: white;
+            padding: 5px 10px;
+            border: none;
             cursor: pointer;
+            border-radius: 4px;
         }
     </style>
 </head>
 <body>
 
-    <nav>
-        <a href="painel.html">Painel</a> |
-        <a href="relatorios.html">Relatórios</a> |
-        <a href="index.html">Sair</a>
-    </nav>
-
     <div class="container">
-        <h1>Painel de Agendamentos</h1>
+        <h1>Painel de Controle</h1>
 
-        <h2>Adicionar Novo Atendimento</h2>
-        <form id="formAtendimento">
-            <input type="text" id="tipoServico" placeholder="Tipo de Serviço" required>
-            <input type="text" id="empresa" placeholder="Empresa" required>
-            <input type="date" id="data" required>
-            <input type="time" id="hora" required>
-            <input type="text" id="modelo" placeholder="Modelo do Veículo" required>
-            <input type="text" id="placa" placeholder="Placa" required>
-            <input type="text" id="ano" placeholder="Ano" required>
-            <input type="text" id="cor" placeholder="Cor" required>
-            <input type="text" id="cliente" placeholder="Nome do Cliente" required>
-            <input type="tel" id="telefone" placeholder="Telefone" required>
-            <input type="text" id="endereco" placeholder="Endereço" required>
-            <input type="text" id="tecnico" placeholder="Técnico Responsável" required>
-            <button type="submit">Adicionar Atendimento</button>
-        </form>
+        <!-- SEÇÃO DE GERENCIAMENTO DE USUÁRIOS (VISÍVEL APENAS PARA O MESTRE) -->
+        <div id="user-management" class="form-container">
+            <h2>Gerenciar Usuários</h2>
+            <form id="formUsuario">
+                <input type="text" id="username" placeholder="Usuário" required>
+                <input type="password" id="password" placeholder="Senha" required>
+                <select id="tipo">
+                    <option value="admin">Administrador</option>
+                    <option value="tecnico">Técnico</option>
+                </select>
+                <button type="submit">Adicionar Usuário</button>
+            </form>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Tipo de Serviço</th>
-                    <th>Empresa</th>
-                    <th>Data</th>
-                    <th>Hora</th>
-                    <th>Modelo</th>
-                    <th>Placa</th>
-                    <th>Ano</th>
-                    <th>Cor</th>
-                    <th>Cliente</th>
-                    <th>Telefone</th>
-                    <th>Endereço</th>
-                    <th>Mapa</th>
-                    <th>Técnico</th>
-                    <th>Status</th>
-                    <th>Observação</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+            <h2>Usuários Cadastrados</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Usuário</th>
+                        <th>Tipo</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="usuariosTabela"></tbody>
+            </table>
+        </div>
+
+        <button onclick="logout()">Sair</button>
     </div>
 
     <script>
-        document.getElementById("formAtendimento").addEventListener("submit", function(event) {
+        // Verifica se já existe um usuário mestre, caso contrário, cria um
+        let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+        if (usuarios.length === 0) {
+            usuarios.push({ username: "mestre", password: "admin123", tipo: "admin" });
+            localStorage.setItem("usuarios", JSON.stringify(usuarios));
+        }
+
+        // Adicionar usuário
+        document.getElementById("formUsuario").addEventListener("submit", function(event) {
             event.preventDefault();
-            const atendimento = {
-                tipoServico: document.getElementById("tipoServico").value,
-                empresa: document.getElementById("empresa").value,
-                data: document.getElementById("data").value,
-                hora: document.getElementById("hora").value,
-                modelo: document.getElementById("modelo").value,
-                placa: document.getElementById("placa").value,
-                ano: document.getElementById("ano").value,
-                cor: document.getElementById("cor").value,
-                cliente: document.getElementById("cliente").value,
-                telefone: document.getElementById("telefone").value,
-                endereco: document.getElementById("endereco").value,
-                tecnico: document.getElementById("tecnico").value,
-                status: "Pendente",
-                observacao: ""
+
+            const usuario = {
+                username: document.getElementById("username").value,
+                password: document.getElementById("password").value,
+                tipo: document.getElementById("tipo").value
             };
 
-            let atendimentos = JSON.parse(localStorage.getItem("atendimentos")) || [];
-            atendimentos.push(atendimento);
-            localStorage.setItem("atendimentos", JSON.stringify(atendimentos));
+            usuarios.push(usuario);
+            localStorage.setItem("usuarios", JSON.stringify(usuarios));
             atualizarTabela();
-            document.getElementById("formAtendimento").reset();
+            document.getElementById("formUsuario").reset();
         });
 
+        // Atualiza a tabela de usuários
         function atualizarTabela() {
-            const tbody = document.querySelector("tbody");
+            const tbody = document.getElementById("usuariosTabela");
             tbody.innerHTML = "";
-            let atendimentos = JSON.parse(localStorage.getItem("atendimentos")) || [];
-            atendimentos.forEach((atendimento, index) => {
+
+            usuarios.forEach((usuario, index) => {
                 let row = tbody.insertRow();
                 row.innerHTML = `
-                    <td>${atendimento.tipoServico}</td>
-                    <td>${atendimento.empresa}</td>
-                    <td>${atendimento.data}</td>
-                    <td>${atendimento.hora}</td>
-                    <td>${atendimento.modelo}</td>
-                    <td>${atendimento.placa}</td>
-                    <td>${atendimento.ano}</td>
-                    <td>${atendimento.cor}</td>
-                    <td>${atendimento.cliente}</td>
-                    <td>${atendimento.telefone}</td>
-                    <td>${atendimento.endereco}</td>
-                    <td><button onclick="abrirMapa('${atendimento.endereco}')">Ver no Mapa</button></td>
-                    <td>${atendimento.tecnico}</td>
-                    <td><button class="status-btn pendente" onclick="alterarStatus(this)">${atendimento.status}</button></td>
-                    <td><input type="text" class="observacao" value="${atendimento.observacao}" oninput="salvarObservacao(this, ${index})"></td>
+                    <td>${usuario.username}</td>
+                    <td>${usuario.tipo}</td>
+                    <td>
+                        <button class="edit-btn" onclick="editarUsuario(${index})">Editar</button>
+                        <button class="delete-btn" onclick="removerUsuario(${index})">Excluir</button>
+                    </td>
                 `;
             });
         }
-        window.onload = atualizarTabela;
+
+        // Editar usuário
+        function editarUsuario(index) {
+            let usuario = usuarios[index];
+            let novoUsuario = prompt("Novo nome de usuário:", usuario.username);
+            let novaSenha = prompt("Nova senha:", usuario.password);
+
+            if (novoUsuario && novaSenha) {
+                usuarios[index].username = novoUsuario;
+                usuarios[index].password = novaSenha;
+                localStorage.setItem("usuarios", JSON.stringify(usuarios));
+                atualizarTabela();
+            }
+        }
+
+        // Remover usuário
+        function removerUsuario(index) {
+            usuarios.splice(index, 1);
+            localStorage.setItem("usuarios", JSON.stringify(usuarios));
+            atualizarTabela();
+        }
+
+        // Logout
+        function logout() {
+            window.location.href = "login.html";
+        }
+
+        window.onload = function() {
+            atualizarTabela();
+            // Verifica se o usuário logado é administrador
+            let usuarioLogado = JSON.parse(sessionStorage.getItem("usuarioLogado"));
+            if (!usuarioLogado || usuarioLogado.tipo !== "admin") {
+                document.getElementById("user-management").style.display = "none";
+            }
+        };
     </script>
+
 </body>
 </html>
