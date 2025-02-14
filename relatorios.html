@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatórios de Atendimentos</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            color: #ff8c00;
+        }
+
+        canvas {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Relatórios de Atendimentos</h1>
+        <canvas id="graficoAtendimentos"></canvas>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Objeto para contar atendimentos por técnico
+            const atendimentos = {};
+
+            // Simulando a leitura dos atendimentos armazenados no localStorage
+            for (let i = 1; i <= localStorage.length; i++) {
+                const status = localStorage.getItem(i);
+                if (status === "Realizado") {
+                    const tecnico = localStorage.getItem(`tecnico_${i}`);
+                    if (tecnico) {
+                        atendimentos[tecnico] = (atendimentos[tecnico] || 0) + 1;
+                    }
+                }
+            }
+
+            // Preparar dados para o gráfico
+            const labels = Object.keys(atendimentos);
+            const dataValues = Object.values(atendimentos);
+
+            const dadosAtendimentos = {
+                labels: labels,
+                datasets: [{
+                    label: "Atendimentos Realizados",
+                    data: dataValues,
+                    backgroundColor: ["red", "blue", "green", "orange", "purple"]
+                }]
+            };
+
+            // Criar o gráfico
+            const ctx = document.getElementById("graficoAtendimentos").getContext("2d");
+            new Chart(ctx, {
+                type: "bar",
+                data: dadosAtendimentos,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

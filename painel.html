@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Agendamentos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+
+        nav {
+            background-color: #ff8c00;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            color: #ff8c00;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #ff8c00;
+            color: white;
+        }
+
+        .status-btn {
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .realizado {
+            background-color: green;
+            color: white;
+        }
+
+        .pendente {
+            background-color: red;
+            color: white;
+        }
+
+        .observacao {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="painel.html">Painel</a> |
+        <a href="relatorios.html">Relatórios</a> |
+        <a href="index.html">Sair</a>
+    </nav>
+
+    <div class="container">
+        <h1>Painel de Agendamentos</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Cliente</th>
+                    <th>Data</th>
+                    <th>Endereço</th>
+                    <th>Mapa</th>
+                    <th>Técnico</th>
+                    <th>Status</th>
+                    <th>Observação</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>João Silva</td>
+                    <td>15/02/2025</td>
+                    <td>Rua A, 123</td>
+                    <td><button onclick="abrirMapa('Rua A, 123')">Ver no Mapa</button></td>
+                    <td>Marcos</td>
+                    <td><button class="status-btn pendente" onclick="alterarStatus(this)">Pendente</button></td>
+                    <td><input type="text" class="observacao" placeholder="Digite uma observação..." oninput="salvarObservacao(this)"></td>
+                </tr>
+                <tr>
+                    <td>Ana Souza</td>
+                    <td>16/02/2025</td>
+                    <td>Rua B, 456</td>
+                    <td><button onclick="abrirMapa('Rua B, 456')">Ver no Mapa</button></td>
+                    <td>Roberto</td>
+                    <td><button class="status-btn realizado" onclick="alterarStatus(this)">Realizado</button></td>
+                    <td><input type="text" class="observacao" placeholder="Digite uma observação..." oninput="salvarObservacao(this)"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div style="margin-top: 20px;">
+            <a href="relatorios.html" style="padding: 10px 20px; background: #ff8c00; color: white; text-decoration: none; border-radius: 5px;">
+                Ver Relatórios
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function abrirMapa(endereco) {
+            const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(endereco)}`;
+            window.open(url, '_blank');
+        }
+
+        function alterarStatus(botao) {
+            if (botao.classList.contains("pendente")) {
+                botao.classList.remove("pendente");
+                botao.classList.add("realizado");
+                botao.innerText = "Realizado";
+            } else {
+                botao.classList.remove("realizado");
+                botao.classList.add("pendente");
+                botao.innerText = "Pendente";
+            }
+        }
+
+        function salvarObservacao(input) {
+            let index = input.parentElement.parentElement.rowIndex;
+            let observacao = input.value;
+            localStorage.setItem(`observacao_${index}`, observacao);
+        }
+
+        function carregarObservacoes() {
+            document.querySelectorAll(".observacao").forEach((input, index) => {
+                let saved = localStorage.getItem(`observacao_${index + 1}`);
+                if (saved) input.value = saved;
+            });
+        }
+
+        window.onload = carregarObservacoes;
+    </script>
+
+</body>
+</html>

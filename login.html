@@ -119,16 +119,22 @@
             const username = document.getElementById("username").value;
             const password = document.getElementById("password").value;
 
-            // Usuários cadastrados (exemplo)
+            // Lista de usuários cadastrados e seus níveis de acesso
             const users = {
-                "admin": "admin123",
-                "tecnico1": "senha123",
-                "tecnico2": "senha456"
+                "admin": { senha: "admin123", tipo: "admin" },
+                "tecnico1": { senha: "senha123", tipo: "tecnico" },
+                "tecnico2": { senha: "senha456", tipo: "tecnico" }
             };
 
-            if (users[username] && users[username] === password) {
+            if (users[username] && users[username].senha === password) {
                 alert("Login bem-sucedido!");
-                window.location.href = "index.html"; // Redireciona para a agenda
+
+                // Redireciona para o painel correto
+                if (users[username].tipo === "admin") {
+                    window.location.href = "painel.html";
+                } else {
+                    window.location.href = "painel_tecnico.html";
+                }
             } else {
                 document.getElementById("errorMessage").innerText = "Usuário ou senha incorretos!";
             }
