@@ -4,47 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel do Funcionário</title>
-    <link rel="stylesheet" href="styles.css">
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
+            text-align: center;
         }
         .container {
             width: 80%;
-            max-width: 900px;
+            margin: auto;
             background: white;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 0px 10px #ccc;
         }
         .tabs {
             display: flex;
             justify-content: space-between;
-        }
-        .tab-button {
-            width: 50%;
+            background: #FF7700;
             padding: 10px;
-            border: none;
-            background: #d67f2c;
-            color: white;
-            font-size: 16px;
+            border-radius: 5px;
+        }
+        .tab {
+            flex: 1;
+            padding: 10px;
             cursor: pointer;
-            border-radius: 5px 5px 0 0;
+            color: white;
+            font-weight: bold;
         }
-        .tab-button:hover {
-            background: #c46b1f;
-        }
-        .tab-content {
-            display: none;
-        }
-        .active {
-            display: block;
+        .tab.active {
+            background: #E65C00;
         }
         .form-group {
             display: flex;
@@ -52,12 +41,10 @@
             margin-bottom: 10px;
         }
         .form-group label {
-            width: 20%;
             font-weight: bold;
         }
-        .form-group input,
-        .form-group select {
-            width: 75%;
+        .form-group input, .form-group select {
+            width: 48%;
             padding: 8px;
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -66,101 +53,149 @@
             width: 100%;
         }
         .button {
-            width: 100%;
-            padding: 10px;
-            background: #d67f2c;
-            border: none;
+            background: #FF7700;
             color: white;
-            font-size: 16px;
+            border: none;
+            padding: 10px;
+            width: 100%;
             cursor: pointer;
             border-radius: 5px;
+            font-size: 16px;
         }
         .button:hover {
-            background: #c46b1f;
+            background: #E65C00;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background: #FF7700;
+            color: white;
         }
     </style>
 </head>
 <body>
+
     <div class="container">
-        <h2 style="text-align: center; color: #d67f2c;">Painel do Funcionário</h2>
         <div class="tabs">
-            <button class="tab-button active" onclick="showTab('agenda')">Agenda de Serviços</button>
-            <button class="tab-button" onclick="showTab('realizados')">Agendamentos Realizados</button>
+            <div class="tab active" onclick="mostrarAba('agenda')">Agenda de Serviços</div>
+            <div class="tab" onclick="mostrarAba('realizados')">Agendamentos Realizados</div>
         </div>
-        
-        <div id="agenda" class="tab-content active">
-            <h3>Adicionar Novo Serviço</h3>
+
+        <div id="agenda" class="aba">
+            <h2>Adicionar Novo Serviço</h2>
+            
             <div class="form-group">
-                <label for="tipo-servico">Tipo de Serviço:</label>
-                <select id="tipo-servico">
+                <label>Tipo de Serviço:</label>
+                <select id="tipoServico">
                     <option value="">Selecione</option>
                     <option value="Instalação">Instalação</option>
                     <option value="Manutenção">Manutenção</option>
                     <option value="Retirada">Retirada</option>
+                    <option value="Reinstalação">Reinstalação</option>
+                    <option value="Entrega de Carnê">Entrega de Carnê</option>
+                    <option value="Passar o Cartão">Passar o Cartão</option>
                 </select>
-                <label for="empresa">Empresa:</label>
+                <label>Empresa:</label>
                 <select id="empresa">
                     <option value="">Selecione</option>
                     <option value="JC Horizonte">JC Horizonte</option>
                     <option value="JC Fortaleza">JC Fortaleza</option>
+                    <option value="Defend">Defend</option>
+                    <option value="Rastremax">Rastremax</option>
                 </select>
             </div>
+
             <div class="form-group">
-                <label for="data">Data:</label>
+                <label>Data:</label>
                 <input type="date" id="data">
-                <label for="horario">Horário:</label>
+                <label>Horário:</label>
                 <select id="horario">
                     <option value="">Selecione um horário</option>
                     <option value="08:00">08:00</option>
                     <option value="09:00">09:00</option>
+                    <option value="10:00">10:00</option>
+                    <option value="11:00">11:00</option>
+                    <option value="13:00">13:00</option>
+                    <option value="14:00">14:00</option>
+                    <option value="15:00">15:00</option>
+                    <option value="16:00">16:00</option>
+                    <option value="17:00">17:00</option>
                 </select>
-                <label for="tecnico">Técnico:</label>
-                <select id="tecnico">
-                    <option value="">Selecione</option>
-                    <option value="Bruno">Bruno</option>
-                    <option value="Cleber">Cleber</option>
-                </select>
             </div>
+
             <div class="form-group">
-                <label for="cliente">Nome do Cliente:</label>
-                <input type="text" id="cliente" placeholder="Nome e Sobrenome">
-                <label for="telefone">Telefone:</label>
-                <input type="text" id="telefone" placeholder="(85) 99999-9999">
+                <label>Nome do Cliente:</label>
+                <input type="text" id="cliente">
+                <label>Telefone:</label>
+                <input type="text" id="telefone">
             </div>
+
             <div class="form-group">
-                <label for="endereco">Endereço:</label>
-                <input type="text" id="endereco" class="full-width" placeholder="Rua, Número, Bairro, Cidade">
+                <label>Endereço:</label>
+                <input type="text" id="endereco" class="full-width">
             </div>
+
             <div class="form-group">
-                <label for="modelo">Modelo do Veículo:</label>
-                <input type="text" id="modelo" placeholder="Modelo">
-                <label for="ano">Ano:</label>
-                <input type="text" id="ano" placeholder="Ano">
-                <label for="placa">Placa:</label>
-                <input type="text" id="placa" placeholder="Placa (Opcional)">
+                <label>Modelo do Veículo:</label>
+                <input type="text" id="modelo">
+                <label>Ano do Veículo:</label>
+                <input type="text" id="ano">
+                <label>Placa (Opcional):</label>
+                <input type="text" id="placa">
             </div>
-            <button class="button">Adicionar Serviço</button>
-        </div>
-        
-        <div id="realizados" class="tab-content">
-            <h3>Agendamentos Realizados</h3>
+
+            <button class="button" onclick="adicionarServico()">Adicionar Serviço</button>
+
+            <h3>Agenda de Serviços</h3>
             <table>
-                <tr>
-                    <th>Data</th>
-                    <th>Horário</th>
-                    <th>Técnico</th>
-                    <th>Status</th>
-                </tr>
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Horário</th>
+                        <th>Técnico</th>
+                        <th>Cliente</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelaServicos">
+                </tbody>
             </table>
         </div>
     </div>
+
     <script>
-        function showTab(tab) {
-            document.getElementById('agenda').classList.remove('active');
-            document.getElementById('realizados').classList.remove('active');
-            document.getElementById(tab).classList.add('active');
+        function adicionarServico() {
+            let tipoServico = document.getElementById("tipoServico").value;
+            let empresa = document.getElementById("empresa").value;
+            let data = document.getElementById("data").value;
+            let horario = document.getElementById("horario").value;
+            let cliente = document.getElementById("cliente").value;
+            let telefone = document.getElementById("telefone").value;
+            let endereco = document.getElementById("endereco").value;
+            let modelo = document.getElementById("modelo").value;
+            let ano = document.getElementById("ano").value;
+            
+            if (!tipoServico || !empresa || !data || !horario || !cliente || !telefone || !endereco || !modelo || !ano) {
+                alert("Preencha todos os campos obrigatórios!");
+                return;
+            }
+
+            let tabela = document.getElementById("tabelaServicos");
+            let linha = tabela.insertRow();
+            linha.innerHTML = `<td>${data}</td><td>${horario}</td><td>Bruno</td><td>${cliente}</td><td>Pendente</td>`;
+            
+            alert("Serviço adicionado com sucesso!");
         }
     </script>
+
 </body>
 </html>
 
