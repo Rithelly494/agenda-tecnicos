@@ -45,6 +45,7 @@
             color: white;
             font-size: 16px;
             cursor: pointer;
+            border-radius: 5px;
         }
 
         button:hover {
@@ -68,23 +69,15 @@
             color: white;
         }
 
-        .edit-btn {
-            background-color: blue;
-            color: white;
+        .edit-btn, .delete-btn {
             padding: 5px 10px;
             border: none;
             cursor: pointer;
             border-radius: 4px;
         }
 
-        .delete-btn {
-            background-color: red;
-            color: white;
-            padding: 5px 10px;
-            border: none;
-            cursor: pointer;
-            border-radius: 4px;
-        }
+        .edit-btn { background-color: blue; color: white; }
+        .delete-btn { background-color: red; color: white; }
     </style>
 </head>
 <body>
@@ -92,7 +85,7 @@
     <div class="container">
         <h1>Painel de Controle</h1>
 
-        <!-- SEÇÃO DE GERENCIAMENTO DE USUÁRIOS (VISÍVEL APENAS PARA O MESTRE) -->
+        <!-- SEÇÃO DE GERENCIAMENTO DE USUÁRIOS (SOMENTE PARA ADMIN) -->
         <div id="user-management" class="form-container">
             <h2>Gerenciar Usuários</h2>
             <form id="formUsuario">
@@ -118,86 +111,61 @@
             </table>
         </div>
 
+        <!-- SEÇÃO DE GERENCIAMENTO DE ATENDIMENTOS (AGORA DISPONÍVEL PARA O ADMIN) -->
+        <div id="atendimentos-section" class="form-container">
+            <h2>Gerenciar Atendimentos</h2>
+            <form id="formAtendimento">
+                <input type="text" id="cliente" placeholder="Nome do Cliente" required>
+                <input type="text" id="veiculo" placeholder="Modelo do Veículo" required>
+                <input type="text" id="placa" placeholder="Placa" required>
+                <input type="date" id="dataAtendimento" required>
+                <button type="submit">Adicionar Atendimento</button>
+            </form>
+
+            <h2>Atendimentos Cadastrados</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Veículo</th>
+                        <th>Placa</th>
+                        <th>Data</th>
+                    </tr>
+                </thead>
+                <tbody id="atendimentosTabela"></tbody>
+            </table>
+        </div>
+
         <button onclick="logout()">Sair</button>
     </div>
 
     <script>
-        // Verifica se já existe um usuário mestre, caso contrário, cria um
         let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
-        if (usuarios.length === 0) {
-            usuarios.push({ username: "mestre", password: "admin123", tipo: "admin" });
+        if (!usuarios.some(u => u.username === "admin")) {
+            usuarios.push({ username: "admin", password: "102030", tipo: "admin" });
             localStorage.setItem("usuarios", JSON.stringify(usuarios));
         }
 
-        // Adicionar usuário
         document.getElementById("formUsuario").addEventListener("submit", function(event) {
             event.preventDefault();
-
             const usuario = {
                 username: document.getElementById("username").value,
                 password: document.getElementById("password").value,
                 tipo: document.getElementById("tipo").value
             };
-
             usuarios.push(usuario);
             localStorage.setItem("usuarios", JSON.stringify(usuarios));
             atualizarTabela();
             document.getElementById("formUsuario").reset();
         });
 
-        // Atualiza a tabela de usuários
         function atualizarTabela() {
             const tbody = document.getElementById("usuariosTabela");
             tbody.innerHTML = "";
-
             usuarios.forEach((usuario, index) => {
                 let row = tbody.insertRow();
                 row.innerHTML = `
                     <td>${usuario.username}</td>
                     <td>${usuario.tipo}</td>
                     <td>
-                        <button class="edit-btn" onclick="editarUsuario(${index})">Editar</button>
-                        <button class="delete-btn" onclick="removerUsuario(${index})">Excluir</button>
-                    </td>
-                `;
-            });
-        }
-
-        // Editar usuário
-        function editarUsuario(index) {
-            let usuario = usuarios[index];
-            let novoUsuario = prompt("Novo nome de usuário:", usuario.username);
-            let novaSenha = prompt("Nova senha:", usuario.password);
-
-            if (novoUsuario && novaSenha) {
-                usuarios[index].username = novoUsuario;
-                usuarios[index].password = novaSenha;
-                localStorage.setItem("usuarios", JSON.stringify(usuarios));
-                atualizarTabela();
-            }
-        }
-
-        // Remover usuário
-        function removerUsuario(index) {
-            usuarios.splice(index, 1);
-            localStorage.setItem("usuarios", JSON.stringify(usuarios));
-            atualizarTabela();
-        }
-
-        // Logout
-        function logout() {
-            window.location.href = "login.html";
-        }
-
-        window.onload = function() {
-            atualizarTabela();
-            // Verifica se o usuário logado é administrador
-            let usuarioLogado = JSON.parse(sessionStorage.getItem("usuarioLogado"));
-            if (!usuarioLogado || usuarioLogado.tipo !== "admin") {
-                document.getElementById("user-management").style.display = "none";
-            }
-        };
-    </script>
-
-</body>
-</html>
+         
