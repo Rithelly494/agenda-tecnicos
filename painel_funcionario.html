@@ -5,89 +5,140 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel do Funcionário</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #e67e22;
+        }
+        .form-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .form-group label {
+            width: 25%;
+            font-weight: bold;
+        }
+        .form-group input, .form-group select {
+            width: 70%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .full-width {
+            width: 100%;
+        }
+        .btn {
+            background: #e67e22;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 100%;
+            font-size: 16px;
+        }
+        .btn:hover {
+            background: #d35400;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <h2>Painel do Funcionário</h2>
         
         <div class="tabs">
-            <button class="tab-button active" onclick="openTab('agendamento')">Agendamento</button>
-            <button class="tab-button" onclick="openTab('realizados')">Agendamentos Realizados</button>
+            <button class="btn" onclick="showTab('agenda')">Agenda de Serviços</button>
+            <button class="btn" onclick="showTab('realizados')">Agendamentos Realizados</button>
         </div>
-        
-        <div id="agendamento" class="tab-content active">
+
+        <div id="agenda" class="tab-content">
             <h3>Adicionar Novo Serviço</h3>
-            <form id="agendamentoForm">
-                <label for="tipoServico">Tipo de Serviço:</label>
-                <select id="tipoServico">
-                    <option value="" selected disabled>Selecione</option>
-                    <option value="instalacao">Instalação</option>
-                    <option value="manutencao">Manutenção</option>
-                    <option value="retirada">Retirada</option>
-                    <option value="reinstalacao">Reinstalação</option>
-                    <option value="entrega">Entrega de Carnê</option>
-                    <option value="cartao">Passar o Cartão</option>
+            <div class="form-group">
+                <label>Tipo de Serviço:</label>
+                <select>
+                    <option value="">Selecione</option>
+                    <option value="Instalacao">Instalação</option>
+                    <option value="Manutencao">Manutenção</option>
+                    <option value="Retirada">Retirada</option>
+                    <option value="Reinstalacao">Reinstalação</option>
+                    <option value="Entrega">Entrega de Carnê</option>
+                    <option value="Cartao">Passar o Cartão</option>
                 </select>
+                <label>Empresa:</label>
+                <select>
+                    <option value="">Selecione</option>
+                    <option value="JC Horizonte">JC Horizonte</option>
+                    <option value="JC Fortaleza">JC Fortaleza</option>
+                    <option value="Defend">Defend</option>
+                    <option value="Rastremax">Rastremax</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Data:</label>
+                <input type="date">
+                <label>Horário:</label>
+                <select>
+                    <option value="">Selecione um horário</option>
+                    <option>08:00</option>
+                    <option>09:00</option>
+                    <option>10:00</option>
+                    <option>11:00</option>
+                    <option>13:00</option>
+                    <option>14:00</option>
+                    <option>15:00</option>
+                    <option>16:00</option>
+                    <option>17:00</option>
+                </select>
+                <label>Técnico Responsável:</label>
+                <select>
+                    <option value="">Selecione</option>
+                    <option value="Bruno">Bruno</option>
+                    <option value="Cleber">Cleber</option>
+                    <option value="Romario">Romario</option>
+                </select>
+            </div>
 
-                <label for="empresa">Empresa:</label>
-                <select id="empresa">
-                    <option value="" selected disabled>Selecione</option>
-                    <option value="jc_horizonte">JC Horizonte</option>
-                    <option value="jc_fortaleza">JC Fortaleza</option>
-                    <option value="defend">Defend</option>
-                    <option value="rastremax">Rastremax</option>
-                </select>
+            <div class="form-group">
+                <label>Nome do Cliente:</label>
+                <input type="text" placeholder="Nome e Sobrenome">
+                <label>Telefone:</label>
+                <input type="text" placeholder="(99) 99999-9999">
+            </div>
 
-                <label for="data">Data:</label>
-                <input type="date" id="data">
-                
-                <label for="horario">Horário:</label>
-                <select id="horario">
-                    <option value="" selected disabled>Selecione um horário</option>
-                    <option value="08:00">08:00</option>
-                    <option value="09:00">09:00</option>
-                    <option value="10:00">10:00</option>
-                    <option value="11:00">11:00</option>
-                    <option value="13:00">13:00</option>
-                    <option value="14:00">14:00</option>
-                    <option value="15:00">15:00</option>
-                    <option value="16:00">16:00</option>
-                    <option value="17:00">17:00</option>
-                </select>
-                
-                <label for="tecnico">Técnico Responsável:</label>
-                <select id="tecnico">
-                    <option value="" selected disabled>Selecione</option>
-                    <option value="bruno">Bruno</option>
-                    <option value="cleber">Cleber</option>
-                    <option value="romario">Romário</option>
-                </select>
-                
-                <label for="cliente">Nome do Cliente:</label>
-                <input type="text" id="cliente" placeholder="Nome e Sobrenome" required>
-                
-                <label for="telefone">Telefone:</label>
-                <input type="tel" id="telefone" placeholder="(85) 99999-9999" required>
-                
-                <label for="endereco">Endereço:</label>
-                <input type="text" id="endereco" placeholder="Rua, Número, Bairro, Cidade" required>
-                
-                <label for="modelo">Modelo do Veículo:</label>
-                <input type="text" id="modelo" placeholder="Modelo" required>
-                
-                <label for="ano">Ano do Veículo:</label>
-                <input type="text" id="ano" placeholder="Ano" required>
-                
-                <label for="placa">Placa do Veículo (Opcional):</label>
-                <input type="text" id="placa" placeholder="Placa">
-                
-                <button type="submit">Adicionar Serviço</button>
-            </form>
+            <div class="form-group">
+                <label>Endereço:</label>
+                <input type="text" class="full-width" placeholder="Rua, Número, Bairro, Cidade">
+            </div>
+            
+            <div class="form-group">
+                <label>Modelo do Veículo:</label>
+                <input type="text" placeholder="Modelo">
+                <label>Ano do Veículo:</label>
+                <input type="text" placeholder="Ano">
+                <label>Placa do Veículo (Opcional):</label>
+                <input type="text" placeholder="Placa">
+            </div>
+
+            <button class="btn">Adicionar Serviço</button>
         </div>
 
-        <div id="realizados" class="tab-content">
+        <div id="realizados" class="tab-content" style="display: none;">
             <h3>Agendamentos Realizados</h3>
-            <table>
+            <table border="1" width="100%">
                 <thead>
                     <tr>
                         <th>Data</th>
@@ -97,22 +148,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Agendamentos realizados serão inseridos aqui -->
+                    <tr>
+                        <td>14/02/2025</td>
+                        <td>08:00</td>
+                        <td>Bruno</td>
+                        <td>Concluído</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
     </div>
 
     <script>
-        function openTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            document.querySelectorAll('.tab-button').forEach(button => {
-                button.classList.remove('active');
-            });
-            document.getElementById(tabName).classList.add('active');
-            document.querySelector(`[onclick="openTab('${tabName}')"]`).classList.add('active');
+        function showTab(tabId) {
+            document.getElementById('agenda').style.display = 'none';
+            document.getElementById('realizados').style.display = 'none';
+            document.getElementById(tabId).style.display = 'block';
         }
     </script>
 </body>
