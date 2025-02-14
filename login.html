@@ -20,6 +20,15 @@
             align-items: center;
             height: 100vh;
             background-color: #ff8c00;
+            background-image: 
+                url('icons/gps.png'), 
+                url('icons/carro.png'), 
+                url('icons/moto.png'), 
+                url('icons/satellite.png'), 
+                url('icons/mapa.png');
+            background-repeat: repeat;
+            background-size: 80px;
+            background-position: center;
         }
 
         .login-container {
@@ -44,9 +53,16 @@
         }
 
         .login-container h2 {
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             color: #ff8c00;
             font-weight: bold;
+        }
+
+        .login-container h3 {
+            margin-bottom: 20px;
+            color: #333;
+            font-weight: bold;
+            font-size: 18px;
         }
 
         .login-container label {
@@ -91,8 +107,9 @@
 <body>
 
     <div class="login-container">
-        <img src="JC_CAR_VC_NO_CONTROLE_logo_wa.png" alt="JC Rastreamento" class="logo">
+        <img src="logo_jc.png" alt="JC Rastreamento" class="logo">
         <h2>Bem-vindo</h2>
+        <h3>Agenda de Serviços</h3>
         <form id="loginForm">
             <label for="username">Usuário:</label>
             <input type="text" id="username" placeholder="Digite seu usuário" required>
@@ -129,4 +146,3 @@
 
 </body>
 </html>
-
