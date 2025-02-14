@@ -8,10 +8,11 @@ app.use(express.static(__dirname));
 
 // Redireciona automaticamente para a tela de login
 app.get("/", (req, res) => {
-    res.redirect("/login.html");
+    res.sendFile(path.join(__dirname, "login.html"));
 });
 
 app.listen(port, () => {
     console.log(`Servidor rodando na porta ${port}`);
 });
+
  
