@@ -4,203 +4,99 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel do Funcionário</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 900px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        }
-        h2 {
-            text-align: center;
-            color: orange;
-        }
-        .tabs {
-            display: flex;
-            justify-content: space-around;
-            background-color: orange;
-            padding: 10px;
-            border-radius: 5px;
-        }
-        .tab {
-            cursor: pointer;
-            padding: 10px 20px;
-            color: white;
-            font-weight: bold;
-        }
-        .tab.active {
-            background-color: darkorange;
-            border-radius: 5px;
-        }
-        .tab-content {
-            display: none;
-            padding: 20px;
-        }
-        .tab-content.active {
-            display: block;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: orange;
-            color: white;
-        }
-        button {
-            background-color: orange;
-            color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            font-size: 16px;
-            width: 100%;
-            margin-top: 10px;
-            border-radius: 5px;
-        }
-        button:hover {
-            background-color: darkorange;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-<div class="container">
-    <h2>Painel do Funcionário</h2>
-
-    <!-- Abas -->
-    <div class="tabs">
-        <div class="tab active" onclick="showTab('agenda')">Agenda de Serviços</div>
-        <div class="tab" onclick="showTab('historico')">Agendamentos Realizados</div>
+    <div class="container">
+        <h2>Painel do Funcionário</h2>
+        <div class="tabs">
+            <button class="tab-button active" onclick="openTab('agenda')">Agenda de Serviços</button>
+            <button class="tab-button" onclick="openTab('realizados')">Agendamentos Realizados</button>
+        </div>
+        
+        <!-- ABA: Agenda de Serviços -->
+        <div id="agenda" class="tab-content active">
+            <h3>Adicionar Novo Serviço</h3>
+            <form id="formServico">
+                <label>Tipo de Serviço:</label>
+                <select>
+                    <option>Instalação</option>
+                    <option>Manutenção</option>
+                    <option>Retirada</option>
+                    <option>Reinstalação</option>
+                    <option>Entrega de Carnê</option>
+                    <option>Passar o Cartão</option>
+                </select>
+                <label>Empresa:</label>
+                <select>
+                    <option>JC Horizonte</option>
+                    <option>JC Fortaleza</option>
+                    <option>Defend</option>
+                    <option>Rastremax</option>
+                </select>
+                <label>Data:</label>
+                <input type="date">
+                <label>Horário:</label>
+                <select>
+                    <option>08:00</option>
+                    <option>09:00</option>
+                    <option>10:00</option>
+                    <option>11:00</option>
+                    <option>13:00</option>
+                    <option>14:00</option>
+                    <option>15:00</option>
+                    <option>16:00</option>
+                    <option>17:00</option>
+                </select>
+                <label>Técnico Responsável:</label>
+                <select>
+                    <option>Bruno</option>
+                    <option>Cleber</option>
+                    <option>Romario</option>
+                </select>
+                <label>Nome do Cliente:</label>
+                <input type="text" placeholder="Nome e Sobrenome" required>
+                <label>Telefone:</label>
+                <input type="tel" placeholder="(99) 99999-9999" required>
+                <label>Endereço:</label>
+                <input type="text" placeholder="Rua, Número, Bairro, Cidade" required>
+                <label>Modelo do Veículo:</label>
+                <input type="text" placeholder="Modelo" required>
+                <label>Ano do Veículo:</label>
+                <input type="number" placeholder="Ano" required>
+                <label>Placa do Veículo (Opcional):</label>
+                <input type="text" placeholder="Placa">
+                <button type="submit">Adicionar Serviço</button>
+            </form>
+        </div>
+        
+        <!-- ABA: Agendamentos Realizados -->
+        <div id="realizados" class="tab-content">
+            <h3>Agendamentos Realizados</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Horário</th>
+                        <th>Técnico</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="listaRealizados">
+                    <!-- Os serviços realizados serão listados aqui -->
+                </tbody>
+            </table>
+        </div>
     </div>
 
-    <!-- Conteúdo da aba de agenda -->
-    <div id="agenda" class="tab-content active">
-        <h3>Adicionar Novo Serviço</h3>
-
-        <form id="serviceForm">
-            <label>Tipo de Serviço:</label>
-            <select id="tipoServico" required>
-                <option value="">Selecione</option>
-                <option value="Instalação">Instalação</option>
-                <option value="Manutenção">Manutenção</option>
-                <option value="Retirada">Retirada</option>
-                <option value="Reinstalação">Reinstalação</option>
-                <option value="Entrega de Carnê">Entrega de Carnê</option>
-                <option value="Passar o Cartão">Passar o Cartão</option>
-            </select>
-
-            <label>Empresa:</label>
-            <select id="empresa" required>
-                <option value="">Selecione</option>
-                <option value="JC Horizonte">JC Horizonte</option>
-                <option value="JC Fortaleza">JC Fortaleza</option>
-                <option value="Defend">Defend</option>
-                <option value="Rastremax">Rastremax</option>
-            </select>
-
-            <label>Data:</label>
-            <input type="date" id="data" required>
-
-            <label>Horário:</label>
-            <select id="horario" required>
-                <option value="">Selecione um horário</option>
-                <option value="08:00">08:00</option>
-                <option value="09:00">09:00</option>
-                <option value="10:00">10:00</option>
-                <option value="11:00">11:00</option>
-                <option value="13:00">13:00</option>
-                <option value="14:00">14:00</option>
-                <option value="15:00">15:00</option>
-                <option value="16:00">16:00</option>
-                <option value="17:00">17:00</option>
-            </select>
-
-            <label>Nome do Cliente:</label>
-            <input type="text" id="cliente" placeholder="Nome e Sobrenome" required>
-
-            <button type="submit">Adicionar Serviço</button>
-        </form>
-
-        <h3>Agenda de Serviços</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Data</th>
-                    <th>Horário</th>
-                    <th>Técnico</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody id="agendaServicos">
-                <!-- Serviços serão adicionados aqui -->
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Conteúdo da aba de histórico -->
-    <div id="historico" class="tab-content">
-        <h3>Agendamentos Realizados</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Data</th>
-                    <th>Horário</th>
-                    <th>Técnico</th>
-                    <th>Serviço</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody id="historicoServicos">
-                <!-- Agendamentos concluídos aparecem aqui -->
-            </tbody>
-        </table>
-    </div>
-</div>
-
-<script>
-    // Alternar entre as abas
-    function showTab(tabName) {
-        document.querySelectorAll('.tab-content').forEach(tab => {
-            tab.classList.remove('active');
-        });
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.classList.remove('active');
-        });
-        document.getElementById(tabName).classList.add('active');
-        document.querySelector(`.tab[onclick="showTab('${tabName}')"]`).classList.add('active');
-    }
-
-    // Simular adição de agendamentos concluídos (exemplo)
-    document.addEventListener("DOMContentLoaded", function() {
-        let historicoServicos = document.getElementById("historicoServicos");
-        let dadosExemplo = [
-            { data: "2025-02-10", horario: "08:00", tecnico: "Bruno", servico: "Instalação", status: "Concluído" },
-            { data: "2025-02-11", horario: "14:00", tecnico: "Cleber", servico: "Manutenção", status: "Concluído" }
-        ];
-
-        dadosExemplo.forEach(servico => {
-            let row = document.createElement("tr");
-            row.innerHTML = `<td>${servico.data}</td><td>${servico.horario}</td><td>${servico.tecnico}</td><td>${servico.servico}</td><td>${servico.status}</td>`;
-            historicoServicos.appendChild(row);
-        });
-    });
-</script>
-
+    <script>
+        function openTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(button => button.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+    </script>
 </body>
 </html>
 
