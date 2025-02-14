@@ -4,43 +4,111 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel do Funcionário</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: orange;
+        }
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        .row {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .row input, .row select {
+            width: 100%;
+        }
+        button {
+            background-color: orange;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: darkorange;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: orange;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Painel do Funcionário</h2>
-        <h3>Adicionar Novo Serviço</h3>
 
-        <form id="formServico">
-            <div class="input-group">
-                <label>Tipo de Serviço:</label>
-                <select id="tipoServico" required>
-                    <option value="">Selecione</option>
-                    <option value="Instalação">Instalação</option>
-                    <option value="Manutenção">Manutenção</option>
-                    <option value="Retirada">Retirada</option>
-                    <option value="Reinstalação">Reinstalação</option>
-                    <option value="Entrega de Carnê">Entrega de Carnê</option>
-                    <option value="Passar o Cartão">Passar o Cartão</option>
-                </select>
-            </div>
-            <div class="input-group">
-                <label>Empresa:</label>
-                <select id="empresa" required>
-                    <option value="">Selecione</option>
-                    <option value="JC Horizonte">JC Horizonte</option>
-                    <option value="JC Fortaleza">JC Fortaleza</option>
-                    <option value="Defend">Defend</option>
-                    <option value="Rastremax">Rastremax</option>
-                </select>
-            </div>
-            <div class="input-group">
+<div class="container">
+    <h2>Painel do Funcionário</h2>
+
+    <h3>Adicionar Novo Serviço</h3>
+
+    <form id="serviceForm">
+        <label>Tipo de Serviço:</label>
+        <select id="tipoServico" required>
+            <option value="">Selecione</option>
+            <option value="Instalação">Instalação</option>
+            <option value="Manutenção">Manutenção</option>
+            <option value="Retirada">Retirada</option>
+            <option value="Reinstalação">Reinstalação</option>
+            <option value="Entrega de Carnê">Entrega de Carnê</option>
+            <option value="Passar o Cartão">Passar o Cartão</option>
+        </select>
+
+        <label>Empresa:</label>
+        <select id="empresa" required>
+            <option value="">Selecione</option>
+            <option value="JC Horizonte">JC Horizonte</option>
+            <option value="JC Fortaleza">JC Fortaleza</option>
+            <option value="Defend">Defend</option>
+            <option value="Rastremax">Rastremax</option>
+        </select>
+
+        <div class="row">
+            <div>
                 <label>Data:</label>
-                <input type="date" id="dataServico" required>
+                <input type="date" id="data" required>
             </div>
-            <div class="input-group">
+            <div>
                 <label>Horário:</label>
-                <select id="horarioServico" required>
+                <select id="horario" required>
                     <option value="">Selecione um horário</option>
                     <option value="08:00">08:00</option>
                     <option value="09:00">09:00</option>
@@ -53,57 +121,89 @@
                     <option value="17:00">17:00</option>
                 </select>
             </div>
-            <div class="input-group">
-                <label>Técnico Responsável:</label>
-                <select id="tecnico" required>
-                    <option value="">Selecione</option>
-                    <option value="Bruno">Bruno</option>
-                    <option value="Cleber">Cleber</option>
-                    <option value="Romário">Romário</option>
-                </select>
-            </div>
-            <div class="input-group">
-                <label>Nome do Cliente:</label>
-                <input type="text" id="cliente" pattern="^[A-Za-z]+\s[A-Za-z]+$" placeholder="Nome e Sobrenome" required>
-            </div>
-            <div class="input-group">
-                <label>Telefone:</label>
-                <input type="text" id="telefone" placeholder="(99) 99999-9999" required>
-            </div>
-            <div class="input-group">
-                <label>Endereço:</label>
-                <input type="text" id="endereco" placeholder="Rua, Número, Bairro, Cidade" required>
-            </div>
-            <div class="input-group">
+        </div>
+
+        <label>Técnico Responsável:</label>
+        <select id="tecnico" required>
+            <option value="">Selecione</option>
+            <option value="Bruno">Bruno</option>
+            <option value="Cleber">Cleber</option>
+            <option value="Romario">Romario</option>
+        </select>
+
+        <label>Nome do Cliente:</label>
+        <input type="text" id="cliente" placeholder="Nome e Sobrenome" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ]+ [A-Za-zÀ-ÖØ-öø-ÿ]+$">
+
+        <label>Telefone:</label>
+        <input type="tel" id="telefone" placeholder="(85) 99999-9999" required pattern="\(\d{2}\) \d{5}-\d{4}">
+
+        <label>Endereço:</label>
+        <input type="text" id="endereco" placeholder="Rua, Número, Bairro, Cidade" required>
+
+        <div class="row">
+            <div>
                 <label>Modelo do Veículo:</label>
                 <input type="text" id="modelo" placeholder="Modelo" required>
             </div>
-            <div class="input-group">
+            <div>
                 <label>Ano do Veículo:</label>
-                <input type="number" id="ano" placeholder="Ano" required>
+                <input type="number" id="ano" placeholder="Ano" required min="1900" max="2100">
             </div>
-            <div class="input-group">
+            <div>
                 <label>Placa do Veículo (Opcional):</label>
                 <input type="text" id="placa" placeholder="Placa">
             </div>
-            <button type="submit">Adicionar Serviço</button>
-        </form>
+        </div>
 
-        <h3>Agenda de Serviços</h3>
-        <table id="agendaServicos">
-            <thead>
-                <tr>
-                    <th>Data</th>
-                    <th>Horário</th>
-                    <th>Técnico</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
-    </div>
-    <script src="script.js"></script>
+        <button type="submit">Adicionar Serviço</button>
+    </form>
+
+    <h3>Agenda de Serviços</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Horário</th>
+                <th>Técnico</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="agendaServicos">
+            <!-- Serviços serão adicionados aqui -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    document.getElementById("serviceForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        let cliente = document.getElementById("cliente").value;
+        let telefone = document.getElementById("telefone").value;
+        let endereco = document.getElementById("endereco").value;
+        let modelo = document.getElementById("modelo").value;
+        let ano = document.getElementById("ano").value;
+
+        if (!cliente.match(/^[A-Za-zÀ-ÖØ-öø-ÿ]+ [A-Za-zÀ-ÖØ-öø-ÿ]+$/)) {
+            alert("O nome do cliente deve conter pelo menos nome e sobrenome!");
+            return;
+        }
+
+        if (!telefone.match(/^\(\d{2}\) \d{5}-\d{4}$/)) {
+            alert("O telefone deve estar no formato (85) 99999-9999!");
+            return;
+        }
+
+        if (endereco.trim() === "" || modelo.trim() === "" || ano.trim() === "") {
+            alert("Todos os campos obrigatórios devem ser preenchidos!");
+            return;
+        }
+
+        alert("Serviço adicionado com sucesso!");
+        document.getElementById("serviceForm").reset();
+    });
+</script>
+
 </body>
 </html>
 
