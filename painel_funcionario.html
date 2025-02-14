@@ -9,45 +9,48 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="titulo">Painel do Funcionário</h1>
+        <h1 class="title">Painel do Funcionário</h1>
         
         <div class="tabs">
-            <button class="tab-button active" onclick="openTab('agendaServicos')">Agenda de Serviços</button>
-            <button class="tab-button" onclick="openTab('agendamentosRealizados')">Agendamentos Realizados</button>
+            <button class="tab-button active" onclick="openTab(event, 'agenda-servicos')">Agenda de Serviços</button>
+            <button class="tab-button" onclick="openTab(event, 'agendamentos-realizados')">Agendamentos Realizados</button>
         </div>
         
-        <div id="agendaServicos" class="tab-content active">
+        <div id="agenda-servicos" class="tab-content active">
             <h2>Adicionar Novo Serviço</h2>
-            <form id="formServico">
+            <form id="form-agendamento">
                 <div class="form-group">
-                    <label>Tipo de Serviço:</label>
-                    <select id="tipoServico" required>
+                    <label for="tipo-servico">Tipo de Serviço:</label>
+                    <select id="tipo-servico" required>
                         <option value="">Selecione</option>
-                        <option value="Instalação">Instalação</option>
-                        <option value="Manutenção">Manutenção</option>
-                        <option value="Retirada">Retirada</option>
-                        <option value="Reinstalação">Reinstalação</option>
-                        <option value="Entrega de Carnê">Entrega de Carnê</option>
-                        <option value="Passar o Cartão">Passar o Cartão</option>
+                        <option value="instalacao">Instalação</option>
+                        <option value="manutencao">Manutenção</option>
+                        <option value="retirada">Retirada</option>
+                        <option value="reinstalacao">Reinstalação</option>
+                        <option value="entrega-carne">Entrega de Carnê</option>
+                        <option value="passar-cartao">Passar o Cartão</option>
                     </select>
                 </div>
+                
                 <div class="form-group">
-                    <label>Empresa:</label>
+                    <label for="empresa">Empresa:</label>
                     <select id="empresa" required>
                         <option value="">Selecione</option>
-                        <option value="JC Horizonte">JC Horizonte</option>
-                        <option value="JC Fortaleza">JC Fortaleza</option>
-                        <option value="Defend">Defend</option>
-                        <option value="Rastremax">Rastremax</option>
+                        <option value="jc-horizonte">JC Horizonte</option>
+                        <option value="jc-fortaleza">JC Fortaleza</option>
+                        <option value="defend">Defend</option>
+                        <option value="rastremax">Rastremax</option>
                     </select>
                 </div>
+                
                 <div class="form-group">
-                    <label>Data:</label>
-                    <input type="date" id="dataServico" required>
+                    <label for="data">Data:</label>
+                    <input type="date" id="data" required>
                 </div>
+                
                 <div class="form-group">
-                    <label>Horário:</label>
-                    <select id="horarioServico" required>
+                    <label for="horario">Horário:</label>
+                    <select id="horario" required>
                         <option value="">Selecione um horário</option>
                         <option value="08:00">08:00</option>
                         <option value="09:00">09:00</option>
@@ -60,40 +63,48 @@
                         <option value="17:00">17:00</option>
                     </select>
                 </div>
+                
                 <div class="form-group">
-                    <label>Técnico Responsável:</label>
+                    <label for="tecnico">Técnico Responsável:</label>
                     <select id="tecnico" required>
                         <option value="">Selecione</option>
-                        <option value="Bruno">Bruno</option>
-                        <option value="Cleber">Cleber</option>
-                        <option value="Romario">Romario</option>
+                        <option value="bruno">Bruno</option>
+                        <option value="cleber">Cleber</option>
+                        <option value="romario">Romário</option>
                     </select>
                 </div>
+                
                 <div class="form-group">
-                    <label>Nome do Cliente:</label>
-                    <input type="text" id="cliente" placeholder="Nome e Sobrenome" required>
+                    <label for="nome-cliente">Nome do Cliente:</label>
+                    <input type="text" id="nome-cliente" placeholder="Nome e Sobrenome" required>
                 </div>
+                
                 <div class="form-group">
-                    <label>Telefone:</label>
-                    <input type="tel" id="telefone" placeholder="(99) 99999-9999" required>
+                    <label for="telefone">Telefone:</label>
+                    <input type="tel" id="telefone" placeholder="(85) 99999-9999" required>
                 </div>
+                
                 <div class="form-group">
-                    <label>Endereço:</label>
+                    <label for="endereco">Endereço:</label>
                     <input type="text" id="endereco" placeholder="Rua, Número, Bairro, Cidade" required>
                 </div>
+                
                 <div class="form-group">
-                    <label>Modelo do Veículo:</label>
-                    <input type="text" id="modeloVeiculo" required>
+                    <label for="modelo-veiculo">Modelo do Veículo:</label>
+                    <input type="text" id="modelo-veiculo" placeholder="Modelo" required>
                 </div>
+                
                 <div class="form-group">
-                    <label>Ano do Veículo:</label>
-                    <input type="text" id="anoVeiculo" required>
+                    <label for="ano-veiculo">Ano do Veículo:</label>
+                    <input type="text" id="ano-veiculo" placeholder="Ano" required>
                 </div>
+                
                 <div class="form-group">
-                    <label>Placa do Veículo (Opcional):</label>
-                    <input type="text" id="placaVeiculo">
+                    <label for="placa-veiculo">Placa do Veículo (Opcional):</label>
+                    <input type="text" id="placa-veiculo" placeholder="Placa">
                 </div>
-                <button type="submit">Adicionar Serviço</button>
+                
+                <button type="submit" class="btn">Adicionar Serviço</button>
             </form>
             
             <h2>Agenda de Serviços</h2>
@@ -106,11 +117,12 @@
                         <th>Status</th>
                     </tr>
                 </thead>
-                <tbody id="agendaServicosLista"></tbody>
+                <tbody id="tabela-agendamentos">
+                </tbody>
             </table>
         </div>
         
-        <div id="agendamentosRealizados" class="tab-content">
+        <div id="agendamentos-realizados" class="tab-content">
             <h2>Agendamentos Realizados</h2>
             <table>
                 <thead>
@@ -121,7 +133,8 @@
                         <th>Status</th>
                     </tr>
                 </thead>
-                <tbody id="agendamentosLista"></tbody>
+                <tbody id="tabela-realizados">
+                </tbody>
             </table>
         </div>
     </div>
