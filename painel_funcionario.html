@@ -4,139 +4,165 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel do Funcionário</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="script.js" defer></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .tabs button {
+            background-color: orange;
+            border: none;
+            padding: 10px;
+            margin: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            color: white;
+            border-radius: 5px;
+        }
+        .tabs button:hover {
+            background-color: darkorange;
+        }
+        .tab-content {
+            display: none;
+            margin-top: 20px;
+        }
+        .active {
+            display: block;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="title">Painel do Funcionário</h1>
+        <h2>Painel do Funcionário</h2>
         
         <div class="tabs">
-            <button class="tab-button active" onclick="openTab(event, 'agenda-servicos')">Agenda de Serviços</button>
-            <button class="tab-button" onclick="openTab(event, 'agendamentos-realizados')">Agendamentos Realizados</button>
+            <button onclick="openTab('agenda')">Agenda de Serviços</button>
+            <button onclick="openTab('realizados')">Agendamentos Realizados</button>
         </div>
         
-        <div id="agenda-servicos" class="tab-content active">
-            <h2>Adicionar Novo Serviço</h2>
-            <form id="form-agendamento">
-                <div class="form-group">
-                    <label for="tipo-servico">Tipo de Serviço:</label>
-                    <select id="tipo-servico" required>
-                        <option value="">Selecione</option>
-                        <option value="instalacao">Instalação</option>
-                        <option value="manutencao">Manutenção</option>
-                        <option value="retirada">Retirada</option>
-                        <option value="reinstalacao">Reinstalação</option>
-                        <option value="entrega-carne">Entrega de Carnê</option>
-                        <option value="passar-cartao">Passar o Cartão</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="empresa">Empresa:</label>
-                    <select id="empresa" required>
-                        <option value="">Selecione</option>
-                        <option value="jc-horizonte">JC Horizonte</option>
-                        <option value="jc-fortaleza">JC Fortaleza</option>
-                        <option value="defend">Defend</option>
-                        <option value="rastremax">Rastremax</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="data">Data:</label>
-                    <input type="date" id="data" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="horario">Horário:</label>
-                    <select id="horario" required>
-                        <option value="">Selecione um horário</option>
-                        <option value="08:00">08:00</option>
-                        <option value="09:00">09:00</option>
-                        <option value="10:00">10:00</option>
-                        <option value="11:00">11:00</option>
-                        <option value="13:00">13:00</option>
-                        <option value="14:00">14:00</option>
-                        <option value="15:00">15:00</option>
-                        <option value="16:00">16:00</option>
-                        <option value="17:00">17:00</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="tecnico">Técnico Responsável:</label>
-                    <select id="tecnico" required>
-                        <option value="">Selecione</option>
-                        <option value="bruno">Bruno</option>
-                        <option value="cleber">Cleber</option>
-                        <option value="romario">Romário</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="nome-cliente">Nome do Cliente:</label>
-                    <input type="text" id="nome-cliente" placeholder="Nome e Sobrenome" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="telefone">Telefone:</label>
-                    <input type="tel" id="telefone" placeholder="(85) 99999-9999" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="endereco">Endereço:</label>
-                    <input type="text" id="endereco" placeholder="Rua, Número, Bairro, Cidade" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="modelo-veiculo">Modelo do Veículo:</label>
-                    <input type="text" id="modelo-veiculo" placeholder="Modelo" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="ano-veiculo">Ano do Veículo:</label>
-                    <input type="text" id="ano-veiculo" placeholder="Ano" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="placa-veiculo">Placa do Veículo (Opcional):</label>
-                    <input type="text" id="placa-veiculo" placeholder="Placa">
-                </div>
-                
-                <button type="submit" class="btn">Adicionar Serviço</button>
-            </form>
+        <div id="agenda" class="tab-content active">
+            <h3>Adicionar Novo Serviço</h3>
+            <div class="form-group">
+                <label>Tipo de Serviço:</label>
+                <select>
+                    <option>Instalação</option>
+                    <option>Manutenção</option>
+                    <option>Retirada</option>
+                    <option>Reinstalação</option>
+                    <option>Entrega de Carnê</option>
+                    <option>Passar o Cartão</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Empresa:</label>
+                <select>
+                    <option>JC Horizonte</option>
+                    <option>JC Fortaleza</option>
+                    <option>Defend</option>
+                    <option>Rastremax</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Data:</label>
+                <input type="date">
+            </div>
+            <div class="form-group">
+                <label>Horário:</label>
+                <select>
+                    <option>08:00</option>
+                    <option>09:00</option>
+                    <option>10:00</option>
+                    <option>11:00</option>
+                    <option>13:00</option>
+                    <option>14:00</option>
+                    <option>15:00</option>
+                    <option>16:00</option>
+                    <option>17:00</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Nome do Cliente:</label>
+                <input type="text" placeholder="Nome e Sobrenome" required>
+            </div>
+            <div class="form-group">
+                <label>Telefone:</label>
+                <input type="tel" placeholder="(99) 99999-9999" required>
+            </div>
+            <div class="form-group">
+                <label>Endereço:</label>
+                <input type="text" placeholder="Rua, Número, Bairro, Cidade" required>
+            </div>
+            <div class="form-group">
+                <label>Modelo do Veículo:</label>
+                <input type="text" required>
+            </div>
+            <div class="form-group">
+                <label>Ano do Veículo:</label>
+                <input type="number" required>
+            </div>
+            <div class="form-group">
+                <label>Placa do Veículo (Opcional):</label>
+                <input type="text">
+            </div>
+            <button>Adicionar Serviço</button>
             
-            <h2>Agenda de Serviços</h2>
+            <h3>Agenda de Serviços</h3>
             <table>
-                <thead>
-                    <tr>
-                        <th>Data</th>
-                        <th>Horário</th>
-                        <th>Técnico</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="tabela-agendamentos">
-                </tbody>
+                <tr>
+                    <th>Data</th>
+                    <th>Horário</th>
+                    <th>Técnico</th>
+                    <th>Status</th>
+                </tr>
+                <!-- Aqui os serviços serão adicionados -->
             </table>
         </div>
         
-        <div id="agendamentos-realizados" class="tab-content">
-            <h2>Agendamentos Realizados</h2>
+        <div id="realizados" class="tab-content">
+            <h3>Agendamentos Realizados</h3>
             <table>
-                <thead>
-                    <tr>
-                        <th>Data</th>
-                        <th>Horário</th>
-                        <th>Técnico</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="tabela-realizados">
-                </tbody>
+                <tr>
+                    <th>Data</th>
+                    <th>Horário</th>
+                    <th>Técnico</th>
+                    <th>Status</th>
+                </tr>
+                <!-- Aqui os serviços concluídos aparecerão -->
             </table>
         </div>
     </div>
+
+    <script>
+        function openTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.getElementById(tabId).classList.add('active');
+        }
+    </script>
 </body>
 </html>
