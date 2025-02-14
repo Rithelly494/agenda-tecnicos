@@ -82,24 +82,20 @@
             <button type="submit">Adicionar Serviço</button>
         </form>
 
-        <!-- Tabela de Agendamentos -->
-        <h3>Serviços Agendados</h3>
+        <!-- Agenda de Serviços -->
+        <h3>Agenda de Serviços</h3>
+        <button onclick="atualizarAgenda()">Atualizar Agenda</button>
         <table>
             <thead>
                 <tr>
-                    <th>Tipo</th>
-                    <th>Empresa</th>
                     <th>Data</th>
-                    <th>Hora</th>
+                    <th>Horário</th>
                     <th>Técnico</th>
-                    <th>Cliente</th>
-                    <th>Veículo</th>
                     <th>Status</th>
-                    <th>Ações</th>
                 </tr>
             </thead>
-            <tbody id="lista-servicos">
-                <!-- Serviços agendados serão inseridos aqui -->
+            <tbody id="agenda-servicos">
+                <!-- Aqui será exibida a agenda -->
             </tbody>
         </table>
     </div>
@@ -109,7 +105,7 @@
             const horariosDisponiveis = ["08:00", "09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00", "17:00"];
             const servicosAgendados = [];
             const form = document.getElementById("form-agendamento");
-            const listaServicos = document.getElementById("lista-servicos");
+            const listaServicos = document.getElementById("agenda-servicos");
             const horarioSelect = document.getElementById("horario");
             const tecnicoSelect = document.getElementById("tecnico");
             const dataInput = document.getElementById("data");
@@ -157,31 +153,29 @@
                     return;
                 }
 
-                const newRow = document.createElement("tr");
-                newRow.innerHTML = `
-                    <td>${tipo}</td>
-                    <td>${empresa}</td>
-                    <td>${data}</td>
-                    <td>${horario}</td>
-                    <td>${tecnico}</td>
-                    <td>${nome}</td>
-                    <td>${veiculo}</td>
-                    <td>Pendente</td>
-                    <td><button onclick="excluirServico(this)">Excluir</button></td>
-                `;
-
-                listaServicos.appendChild(newRow);
                 servicosAgendados.push({ tipo, empresa, data, horario, tecnico, nome, telefone, endereco, veiculo });
+                atualizarAgenda();
                 form.reset();
                 atualizarHorariosDisponiveis();
             });
-        });
 
-        function excluirServico(button) {
-            button.parentElement.parentElement.remove();
-        }
+            function atualizarAgenda() {
+                listaServicos.innerHTML = "";
+                servicosAgendados.forEach(servico => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${servico.data}</td>
+                        <td>${servico.horario}</td>
+                        <td>${servico.tecnico}</td>
+                        <td>Pendente</td>
+                    `;
+                    listaServicos.appendChild(row);
+                });
+            }
+        });
     </script>
 
 </body>
 </html>
+
 
