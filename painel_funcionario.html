@@ -5,226 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel do Funcionário</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
+    <script>
+        function validarFormulario() {
+            let nome = document.getElementById("cliente").value.trim();
+            let telefone = document.getElementById("telefone").value.trim();
+            let endereco = document.getElementById("endereco").value.trim();
+            let veiculo = document.getElementById("veiculo").value.trim();
+            
+            let nomeRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ]+\s[A-Za-zÀ-ÖØ-öø-ÿ]+$/;
+            let telefoneRegex = /^\(\d{2}\)\s9\d{4}-\d{4}$/;
+            let enderecoRegex = /^.{5,},\s\d{1,5},\s.{3,},\s.{3,}$/;
+            let veiculoRegex = /^.{3,}\s-\s[A-Z]{3}\d{1}[A-Z0-9]{2}\s-\s\d{4}$/;
+            
+            if (!nomeRegex.test(nome)) {
+                alert("Nome inválido. Insira pelo menos nome e sobrenome.");
+                return false;
+            }
+            
+            if (!telefoneRegex.test(telefone)) {
+                alert("Número de telefone inválido. Use o formato (85) 98504-5696");
+                return false;
+            }
+            
+            if (!enderecoRegex.test(endereco)) {
+                alert("Endereço inválido. Insira rua, número, bairro e cidade.");
+                return false;
+            }
+            
+            if (!veiculoRegex.test(veiculo)) {
+                alert("Dados do veículo inválidos. Insira modelo, placa e ano.");
+                return false;
+            }
+            return true;
         }
-        .container {
-            max-width: 900px;
-            background: white;
-            padding: 20px;
-            margin: auto;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        
+        function aplicarMascaraTelefone(input) {
+            let value = input.value.replace(/\D/g, "");
+            if (value.length > 11) {
+                value = value.substring(0, 11);
+            }
+            if (value.length > 2) {
+                value = `(${value.substring(0, 2)}) ${value.substring(2)}`;
+            }
+            if (value.length > 10) {
+                value = `${value.substring(0, 10)}-${value.substring(10)}`;
+            }
+            input.value = value;
         }
-        h2, h3 {
-            text-align: center;
-            color: #333;
-        }
-        form {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-        }
-        .form-group {
-            width: 48%;
-            margin-bottom: 10px;
-        }
-        label {
-            font-weight: bold;
-            display: block;
-        }
-        input, select {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        button {
-            width: 100%;
-            background-color: orange;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        button:hover {
-            background-color: darkorange;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            padding: 10px;
-            border: 1px solid #ddd;
-            text-align: left;
-        }
-        th {
-            background-color: orange;
-            color: white;
-        }
-    </style>
+    </script>
 </head>
 <body>
-    <div class="container">
-        <h2>Painel do Funcionário</h2>
-
-        <!-- Formulário de Agendamento -->
-        <h3>Adicionar Novo Serviço</h3>
-        <form id="form-agendamento">
-            <div class="form-group">
-                <label for="tipo">Tipo de Serviço:</label>
-                <select id="tipo" required>
-                    <option value="">Selecione</option>
-                    <option value="Instalação">Instalação</option>
-                    <option value="Manutenção">Manutenção</option>
-                    <option value="Retirada">Retirada</option>
-                    <option value="Reinstalação">Reinstalação</option>
-                    <option value="Entrega de Carnê">Entrega de Carnê</option>
-                    <option value="Passar o Cartão">Passar o Cartão</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="empresa">Empresa:</label>
-                <select id="empresa" required>
-                    <option value="">Selecione</option>
-                    <option value="JC Horizonte">JC Horizonte</option>
-                    <option value="JC Fortaleza">JC Fortaleza</option>
-                    <option value="Defend">Defend</option>
-                    <option value="Rastremax">Rastremax</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="data">Escolha a Data:</label>
-                <input type="date" id="data" required>
-            </div>
-
-            <div class="form-group">
-                <label for="tecnico">Técnico Responsável:</label>
-                <select id="tecnico" required>
-                    <option value="">Selecione</option>
-                    <option value="Bruno">Bruno</option>
-                    <option value="Cleber">Cleber</option>
-                    <option value="Romário">Romário</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="horario">Escolha o Horário:</label>
-                <select id="horario" required>
-                    <option value="">Selecione um horário</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="nome">Nome do Cliente:</label>
-                <input type="text" id="nome" placeholder="Nome e Sobrenome" required>
-            </div>
-
-            <div class="form-group">
-                <label for="telefone">Telefone:</label>
-                <input type="text" id="telefone" placeholder="(99) 99999-9999" required>
-            </div>
-
-            <div class="form-group">
-                <label for="endereco">Endereço:</label>
-                <input type="text" id="endereco" placeholder="Rua, Número, Bairro, Cidade" required>
-            </div>
-
-            <div class="form-group">
-                <label for="veiculo">Veículo:</label>
-                <input type="text" id="veiculo" placeholder="Modelo - Placa - Ano" required>
-            </div>
-
-            <button type="submit">Adicionar Serviço</button>
-        </form>
-
-        <!-- Agenda de Serviços -->
-        <h3>Agenda de Serviços</h3>
-        <button onclick="atualizarAgenda()">Atualizar Agenda</button>
-        <table>
-            <thead>
-                <tr>
-                    <th>Data</th>
-                    <th>Horário</th>
-                    <th>Técnico</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody id="agenda-servicos">
-                <!-- Aqui será exibida a agenda -->
-            </tbody>
-        </table>
-    </div>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const horariosDisponiveis = ["08:00", "09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00", "17:00"];
-            const servicosAgendados = [];
-            const form = document.getElementById("form-agendamento");
-            const listaServicos = document.getElementById("agenda-servicos");
-            const horarioSelect = document.getElementById("horario");
-            const tecnicoSelect = document.getElementById("tecnico");
-            const dataInput = document.getElementById("data");
-
-            function atualizarHorariosDisponiveis() {
-                const tecnicoSelecionado = tecnicoSelect.value;
-                const dataSelecionada = dataInput.value;
-                horarioSelect.innerHTML = '<option value="">Selecione um horário</option>';
-
-                horariosDisponiveis.forEach(horario => {
-                    const ocupado = servicosAgendados.some(servico =>
-                        servico.tecnico === tecnicoSelecionado &&
-                        servico.data === dataSelecionada &&
-                        servico.horario === horario
-                    );
-
-                    const option = document.createElement("option");
-                    option.value = horario;
-                    option.textContent = horario;
-                    if (ocupado) {
-                        option.disabled = true;
-                    }
-                    horarioSelect.appendChild(option);
-                });
-            }
-
-            tecnicoSelect.addEventListener("change", atualizarHorariosDisponiveis);
-            dataInput.addEventListener("change", atualizarHorariosDisponiveis);
-
-            form.addEventListener("submit", function(event) {
-                event.preventDefault();
-
-                const data = dataInput.value;
-                const horario = horarioSelect.value;
-                const tecnico = tecnicoSelect.value;
-
-                servicosAgendados.push({ data, horario, tecnico });
-                atualizarAgenda();
-                form.reset();
-                atualizarHorariosDisponiveis();
-            });
-
-            function atualizarAgenda() {
-                listaServicos.innerHTML = "";
-                servicosAgendados.forEach(servico => {
-                    const row = document.createElement("tr");
-                    row.innerHTML = `<td>${servico.data}</td><td>${servico.horario}</td><td>${servico.tecnico}</td><td>Pendente</td>`;
-                    listaServicos.appendChild(row);
-                });
-            }
-        });
-    </script>
+    <h1>Painel do Funcionário</h1>
+    <form onsubmit="return validarFormulario()">
+        <label for="cliente">Nome do Cliente:</label>
+        <input type="text" id="cliente" name="cliente" placeholder="Nome e Sobrenome" required>
+        
+        <label for="telefone">Telefone:</label>
+        <input type="text" id="telefone" name="telefone" placeholder="(99) 99999-9999" oninput="aplicarMascaraTelefone(this)" required>
+        
+        <label for="endereco">Endereço:</label>
+        <input type="text" id="endereco" name="endereco" placeholder="Rua, Número, Bairro, Cidade" required>
+        
+        <label for="veiculo">Veículo:</label>
+        <input type="text" id="veiculo" name="veiculo" placeholder="Modelo - Placa - Ano" required>
+        
+        <button type="submit">Adicionar Serviço</button>
+    </form>
 </body>
 </html>
 
