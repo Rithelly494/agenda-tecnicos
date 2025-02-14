@@ -23,39 +23,29 @@
             text-align: center;
             color: orange;
         }
-        label {
-            font-weight: bold;
-            margin-top: 10px;
-            display: block;
-        }
-        input, select {
-            width: 100%;
-            padding: 8px;
-            margin: 5px 0;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-        }
-        .row {
+        .tabs {
             display: flex;
-            justify-content: space-between;
-            gap: 10px;
-        }
-        .row input, .row select {
-            width: 100%;
-        }
-        button {
+            justify-content: space-around;
             background-color: orange;
-            color: white;
-            border: none;
             padding: 10px;
-            cursor: pointer;
-            font-size: 16px;
-            width: 100%;
-            margin-top: 10px;
             border-radius: 5px;
         }
-        button:hover {
+        .tab {
+            cursor: pointer;
+            padding: 10px 20px;
+            color: white;
+            font-weight: bold;
+        }
+        .tab.active {
             background-color: darkorange;
+            border-radius: 5px;
+        }
+        .tab-content {
+            display: none;
+            padding: 20px;
+        }
+        .tab-content.active {
+            display: block;
         }
         table {
             width: 100%;
@@ -71,6 +61,20 @@
             background-color: orange;
             color: white;
         }
+        button {
+            background-color: orange;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: darkorange;
+        }
     </style>
 </head>
 <body>
@@ -78,129 +82,122 @@
 <div class="container">
     <h2>Painel do Funcionário</h2>
 
-    <h3>Adicionar Novo Serviço</h3>
+    <!-- Abas -->
+    <div class="tabs">
+        <div class="tab active" onclick="showTab('agenda')">Agenda de Serviços</div>
+        <div class="tab" onclick="showTab('historico')">Agendamentos Realizados</div>
+    </div>
 
-    <form id="serviceForm">
-        <label>Tipo de Serviço:</label>
-        <select id="tipoServico" required>
-            <option value="">Selecione</option>
-            <option value="Instalação">Instalação</option>
-            <option value="Manutenção">Manutenção</option>
-            <option value="Retirada">Retirada</option>
-            <option value="Reinstalação">Reinstalação</option>
-            <option value="Entrega de Carnê">Entrega de Carnê</option>
-            <option value="Passar o Cartão">Passar o Cartão</option>
-        </select>
+    <!-- Conteúdo da aba de agenda -->
+    <div id="agenda" class="tab-content active">
+        <h3>Adicionar Novo Serviço</h3>
 
-        <label>Empresa:</label>
-        <select id="empresa" required>
-            <option value="">Selecione</option>
-            <option value="JC Horizonte">JC Horizonte</option>
-            <option value="JC Fortaleza">JC Fortaleza</option>
-            <option value="Defend">Defend</option>
-            <option value="Rastremax">Rastremax</option>
-        </select>
+        <form id="serviceForm">
+            <label>Tipo de Serviço:</label>
+            <select id="tipoServico" required>
+                <option value="">Selecione</option>
+                <option value="Instalação">Instalação</option>
+                <option value="Manutenção">Manutenção</option>
+                <option value="Retirada">Retirada</option>
+                <option value="Reinstalação">Reinstalação</option>
+                <option value="Entrega de Carnê">Entrega de Carnê</option>
+                <option value="Passar o Cartão">Passar o Cartão</option>
+            </select>
 
-        <div class="row">
-            <div>
-                <label>Data:</label>
-                <input type="date" id="data" required>
-            </div>
-            <div>
-                <label>Horário:</label>
-                <select id="horario" required>
-                    <option value="">Selecione um horário</option>
-                    <option value="08:00">08:00</option>
-                    <option value="09:00">09:00</option>
-                    <option value="10:00">10:00</option>
-                    <option value="11:00">11:00</option>
-                    <option value="13:00">13:00</option>
-                    <option value="14:00">14:00</option>
-                    <option value="15:00">15:00</option>
-                    <option value="16:00">16:00</option>
-                    <option value="17:00">17:00</option>
-                </select>
-            </div>
-        </div>
+            <label>Empresa:</label>
+            <select id="empresa" required>
+                <option value="">Selecione</option>
+                <option value="JC Horizonte">JC Horizonte</option>
+                <option value="JC Fortaleza">JC Fortaleza</option>
+                <option value="Defend">Defend</option>
+                <option value="Rastremax">Rastremax</option>
+            </select>
 
-        <label>Técnico Responsável:</label>
-        <select id="tecnico" required>
-            <option value="">Selecione</option>
-            <option value="Bruno">Bruno</option>
-            <option value="Cleber">Cleber</option>
-            <option value="Romario">Romario</option>
-        </select>
+            <label>Data:</label>
+            <input type="date" id="data" required>
 
-        <label>Nome do Cliente:</label>
-        <input type="text" id="cliente" placeholder="Nome e Sobrenome" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ]+ [A-Za-zÀ-ÖØ-öø-ÿ]+$">
+            <label>Horário:</label>
+            <select id="horario" required>
+                <option value="">Selecione um horário</option>
+                <option value="08:00">08:00</option>
+                <option value="09:00">09:00</option>
+                <option value="10:00">10:00</option>
+                <option value="11:00">11:00</option>
+                <option value="13:00">13:00</option>
+                <option value="14:00">14:00</option>
+                <option value="15:00">15:00</option>
+                <option value="16:00">16:00</option>
+                <option value="17:00">17:00</option>
+            </select>
 
-        <label>Telefone:</label>
-        <input type="tel" id="telefone" placeholder="(85) 99999-9999" required pattern="\(\d{2}\) \d{5}-\d{4}">
+            <label>Nome do Cliente:</label>
+            <input type="text" id="cliente" placeholder="Nome e Sobrenome" required>
 
-        <label>Endereço:</label>
-        <input type="text" id="endereco" placeholder="Rua, Número, Bairro, Cidade" required>
+            <button type="submit">Adicionar Serviço</button>
+        </form>
 
-        <div class="row">
-            <div>
-                <label>Modelo do Veículo:</label>
-                <input type="text" id="modelo" placeholder="Modelo" required>
-            </div>
-            <div>
-                <label>Ano do Veículo:</label>
-                <input type="number" id="ano" placeholder="Ano" required min="1900" max="2100">
-            </div>
-            <div>
-                <label>Placa do Veículo (Opcional):</label>
-                <input type="text" id="placa" placeholder="Placa">
-            </div>
-        </div>
+        <h3>Agenda de Serviços</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Horário</th>
+                    <th>Técnico</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="agendaServicos">
+                <!-- Serviços serão adicionados aqui -->
+            </tbody>
+        </table>
+    </div>
 
-        <button type="submit">Adicionar Serviço</button>
-    </form>
-
-    <h3>Agenda de Serviços</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Data</th>
-                <th>Horário</th>
-                <th>Técnico</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody id="agendaServicos">
-            <!-- Serviços serão adicionados aqui -->
-        </tbody>
-    </table>
+    <!-- Conteúdo da aba de histórico -->
+    <div id="historico" class="tab-content">
+        <h3>Agendamentos Realizados</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Horário</th>
+                    <th>Técnico</th>
+                    <th>Serviço</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="historicoServicos">
+                <!-- Agendamentos concluídos aparecem aqui -->
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <script>
-    document.getElementById("serviceForm").addEventListener("submit", function(event) {
-        event.preventDefault();
+    // Alternar entre as abas
+    function showTab(tabName) {
+        document.querySelectorAll('.tab-content').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        document.getElementById(tabName).classList.add('active');
+        document.querySelector(`.tab[onclick="showTab('${tabName}')"]`).classList.add('active');
+    }
 
-        let cliente = document.getElementById("cliente").value;
-        let telefone = document.getElementById("telefone").value;
-        let endereco = document.getElementById("endereco").value;
-        let modelo = document.getElementById("modelo").value;
-        let ano = document.getElementById("ano").value;
+    // Simular adição de agendamentos concluídos (exemplo)
+    document.addEventListener("DOMContentLoaded", function() {
+        let historicoServicos = document.getElementById("historicoServicos");
+        let dadosExemplo = [
+            { data: "2025-02-10", horario: "08:00", tecnico: "Bruno", servico: "Instalação", status: "Concluído" },
+            { data: "2025-02-11", horario: "14:00", tecnico: "Cleber", servico: "Manutenção", status: "Concluído" }
+        ];
 
-        if (!cliente.match(/^[A-Za-zÀ-ÖØ-öø-ÿ]+ [A-Za-zÀ-ÖØ-öø-ÿ]+$/)) {
-            alert("O nome do cliente deve conter pelo menos nome e sobrenome!");
-            return;
-        }
-
-        if (!telefone.match(/^\(\d{2}\) \d{5}-\d{4}$/)) {
-            alert("O telefone deve estar no formato (85) 99999-9999!");
-            return;
-        }
-
-        if (endereco.trim() === "" || modelo.trim() === "" || ano.trim() === "") {
-            alert("Todos os campos obrigatórios devem ser preenchidos!");
-            return;
-        }
-
-        alert("Serviço adicionado com sucesso!");
-        document.getElementById("serviceForm").reset();
+        dadosExemplo.forEach(servico => {
+            let row = document.createElement("tr");
+            row.innerHTML = `<td>${servico.data}</td><td>${servico.horario}</td><td>${servico.tecnico}</td><td>${servico.servico}</td><td>${servico.status}</td>`;
+            historicoServicos.appendChild(row);
+        });
     });
 </script>
 
