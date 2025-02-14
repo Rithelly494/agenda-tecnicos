@@ -4,141 +4,82 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel do Funcionário</title>
-    <link rel="stylesheet" href="styles.css"> 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <script>
-        let agendamentos = [
-            { tipo: "Instalação", empresa: "JC Rastreamento", data: "15/02/2025", hora: "10:00", cliente: "João Silva", veiculo: "Carro - ABC1234", tecnico: "Carlos", status: "Reagendado" },
-            { tipo: "Manutenção", empresa: "JC Rastreamento", data: "16/02/2025", hora: "14:00", cliente: "Ana Souza", veiculo: "Moto - XYZ5678", tecnico: "Raely", status: "Pendente" }
-        ];
-
-        function atualizarTabela() {
-            let tbody = document.getElementById("tabelaAgendamentos");
-            tbody.innerHTML = "";
-            agendamentos.forEach((agendamento, index) => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${agendamento.tipo}</td>
-                        <td>${agendamento.empresa}</td>
-                        <td>${agendamento.data}</td>
-                        <td>${agendamento.hora}</td>
-                        <td>${agendamento.cliente}</td>
-                        <td>${agendamento.veiculo}</td>
-                        <td>${agendamento.tecnico}</td>
-                        <td>${agendamento.status}</td>
-                        <td>
-                            ${agendamento.status === "Reagendado" ? `<button onclick="abrirModal(${index})">Editar</button>` : "-"}
-                        </td>
-                    </tr>
-                `;
-            });
-        }
-
-        function adicionarServico() {
-            let tipo = document.getElementById("novoTipo").value;
-            let empresa = document.getElementById("novaEmpresa").value;
-            let data = document.getElementById("novaData").value;
-            let hora = document.getElementById("novaHora").value;
-            let cliente = document.getElementById("novoCliente").value;
-            let veiculo = document.getElementById("novoVeiculo").value;
-            let tecnico = document.getElementById("novoTecnico").value;
-
-            let novoAgendamento = { tipo, empresa, data, hora, cliente, veiculo, tecnico, status: "Pendente" };
-            agendamentos.push(novoAgendamento);
-            atualizarTabela();
-        }
-
-        document.addEventListener("DOMContentLoaded", atualizarTabela);
-    </script>
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            text-align: center;
-        }
-        .container {
-            max-width: 900px;
-            margin: 20px auto;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-        th, td {
-            padding: 10px;
-            text-align: center;
-        }
-        th {
-            background: orange;
-            color: white;
-        }
-        button {
-            background: orange;
-            color: white;
-            border: none;
-            padding: 8px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        button:hover {
-            background: darkorange;
-        }
-        input, select {
-            padding: 8px;
-            margin: 5px;
-            width: 95%;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
     <div class="container">
         <h2>Painel do Funcionário</h2>
 
-        <!-- Formulário para adicionar serviço -->
+        <!-- Formulário de Agendamento -->
         <h3>Adicionar Novo Serviço</h3>
-        <input type="text" id="novoTipo" placeholder="Tipo de Serviço">
-        <input type="text" id="novaEmpresa" placeholder="Empresa">
-        <input type="date" id="novaData">
-        <input type="time" id="novaHora">
-        <input type="text" id="novoCliente" placeholder="Nome do Cliente">
-        <input type="text" id="novoVeiculo" placeholder="Veículo (Modelo - Placa)">
-        <select id="novoTecnico">
-            <option value="Carlos">Carlos</option>
-            <option value="Raely">Raely</option>
-            <option value="Marcos">Marcos</option>
-        </select>
-        <button onclick="adicionarServico()">Adicionar Serviço</button>
+        <form id="form-agendamento">
+            <label for="tipo">Tipo de Serviço:</label>
+            <select id="tipo" required>
+                <option value="">Selecione</option>
+                <option value="Instalação">Instalação</option>
+                <option value="Manutenção">Manutenção</option>
+                <option value="Retirada">Retirada</option>
+                <option value="Reinstalação">Reinstalação</option>
+                <option value="Entrega de Carnê">Entrega de Carnê</option>
+                <option value="Passar o Cartão">Passar o Cartão</option>
+            </select>
 
+            <label for="empresa">Empresa:</label>
+            <select id="empresa" required>
+                <option value="">Selecione</option>
+                <option value="JC Horizonte">JC Horizonte</option>
+                <option value="JC Fortaleza">JC Fortaleza</option>
+                <option value="Defend">Defend</option>
+                <option value="Rastremax">Rastremax</option>
+            </select>
+
+            <label for="data">Escolha a Data:</label>
+            <input type="date" id="data" required>
+
+            <label for="horario">Escolha o Horário:</label>
+            <select id="horario" required>
+                <option value="">Selecione um horário</option>
+            </select>
+
+            <label for="tecnico">Técnico Responsável:</label>
+            <select id="tecnico" required>
+                <option value="">Selecione</option>
+                <option value="Bruno">Bruno</option>
+                <option value="Cleber">Cleber</option>
+                <option value="Romário">Romário</option>
+            </select>
+
+            <label for="nome">Nome do Cliente:</label>
+            <input type="text" id="nome" placeholder="Nome e Sobrenome" required>
+
+            <label for="telefone">Telefone:</label>
+            <input type="text" id="telefone" placeholder="(99) 99999-9999" required>
+
+            <label for="endereco">Endereço:</label>
+            <input type="text" id="endereco" placeholder="Rua, Número, Bairro, Cidade" required>
+
+            <label for="veiculo">Veículo:</label>
+            <input type="text" id="veiculo" placeholder="Modelo - Placa - Ano" required>
+
+            <button type="submit">Adicionar Serviço</button>
+        </form>
+
+        <!-- Tabela de Agendamentos -->
+        <h3>Serviços Agendados</h3>
         <table>
             <thead>
                 <tr>
-                    <th>Tipo de Serviço</th>
+                    <th>Tipo</th>
                     <th>Empresa</th>
                     <th>Data</th>
                     <th>Hora</th>
+                    <th>Técnico</th>
                     <th>Cliente</th>
                     <th>Veículo</th>
-                    <th>Técnico</th>
                     <th>Status</th>
                     <th>Ações</th>
                 </tr>
             </thead>
-            <tbody id="tabelaAgendamentos"></tbody>
-        </table>
-    </div>
-
-</body>
-</html>
+            <tbody id="lista-servicos">
+                <!-- Serviços agendados serão inseridos aqui -->
+            </tbody>
