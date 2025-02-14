@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Usuários</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            color: #ff8c00;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #ff8c00;
+            color: white;
+        }
+
+        .action-btn {
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-right: 5px;
+        }
+
+        .edit-btn {
+            background-color: blue;
+            color: white;
+        }
+
+        .delete-btn {
+            background-color: red;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Gerenciamento de Usuários</h1>
+        <h2>Adicionar Novo Usuário</h2>
+        <form id="formUsuario">
+            <input type="text" id="username" placeholder="Usuário" required>
+            <input type="password" id="password" placeholder="Senha" required>
+            <select id="tipo">
+                <option value="admin">Administrador</option>
+                <option value="tecnico">Técnico</option>
+            </select>
+            <button type="submit">Adicionar Usuário</button>
+        </form>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Usuário</th>
+                    <th>Tipo</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <script>
+        document.getElementById("formUsuario").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const usuario = {
+                username: document.getElementById("username").value,
+                password: document.getElementById("password").value,
+                tipo: document.getElementById("tipo").value
+            };
+
+            let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+            usuarios.push(usuario);
+            localStorage.setItem("usuarios", JSON.stringify(usuarios));
+
+            atualizarTabela();
+            document.getElementById("formUsuario").reset();
+        });
+
+        function atualizarTabela() {
+            const tbody = document.querySelector("tbody");
+            tbody.innerHTML = "";
+
+            let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+
+            usuarios.forEach((usuario, index) => {
+                let row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${usuario.username}</td>
+                    <td>${usuario.tipo}</td>
+                    <td>
+                        <button class="action-btn edit-btn" onclick="editarUsuario(${index})">Editar</button>
+                        <button class="action-btn delete-btn" onclick="removerUsuario(${index})">Excluir</button>
+                    </td>
+                `;
+            });
+        }
+
+        function editarUsuario(index) {
+            let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+            let usuario = usuarios[index];
+
+            let novoUsuario = prompt("Novo nome de usuário:", usuario.username);
+            let novaSenha = prompt("Nova senha:", usuario.password);
+
+            if (novoUsuario && novaSenha) {
+                usuarios[index].username = novoUsuario;
+                usuarios[index].password = novaSenha;
+                localStorage.setItem("usuarios", JSON.stringify(usuarios));
+                atualizarTabela();
+            }
+        }
+
+        function removerUsuario(index) {
+            let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+            usuarios.splice(index, 1);
+            localStorage.setItem("usuarios", JSON.stringify(usuarios));
+ 

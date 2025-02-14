@@ -26,7 +26,7 @@
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1200px;
             margin: 0 auto;
             background: white;
             padding: 20px;
@@ -34,7 +34,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        h1 {
+        h1, h2 {
             color: #ff8c00;
         }
 
@@ -78,6 +78,26 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
+
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        form input, form button {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        form button {
+            background-color: #ff8c00;
+            color: white;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -90,11 +110,37 @@
 
     <div class="container">
         <h1>Painel de Agendamentos</h1>
+
+        <h2>Adicionar Novo Atendimento</h2>
+        <form id="formAtendimento">
+            <input type="text" id="tipoServico" placeholder="Tipo de Serviço" required>
+            <input type="text" id="empresa" placeholder="Empresa" required>
+            <input type="date" id="data" required>
+            <input type="time" id="hora" required>
+            <input type="text" id="modelo" placeholder="Modelo do Veículo" required>
+            <input type="text" id="placa" placeholder="Placa" required>
+            <input type="text" id="ano" placeholder="Ano" required>
+            <input type="text" id="cor" placeholder="Cor" required>
+            <input type="text" id="cliente" placeholder="Nome do Cliente" required>
+            <input type="tel" id="telefone" placeholder="Telefone" required>
+            <input type="text" id="endereco" placeholder="Endereço" required>
+            <input type="text" id="tecnico" placeholder="Técnico Responsável" required>
+            <button type="submit">Adicionar Atendimento</button>
+        </form>
+
         <table>
             <thead>
                 <tr>
-                    <th>Cliente</th>
+                    <th>Tipo de Serviço</th>
+                    <th>Empresa</th>
                     <th>Data</th>
+                    <th>Hora</th>
+                    <th>Modelo</th>
+                    <th>Placa</th>
+                    <th>Ano</th>
+                    <th>Cor</th>
+                    <th>Cliente</th>
+                    <th>Telefone</th>
                     <th>Endereço</th>
                     <th>Mapa</th>
                     <th>Técnico</th>
@@ -102,68 +148,63 @@
                     <th>Observação</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>João Silva</td>
-                    <td>15/02/2025</td>
-                    <td>Rua A, 123</td>
-                    <td><button onclick="abrirMapa('Rua A, 123')">Ver no Mapa</button></td>
-                    <td>Marcos</td>
-                    <td><button class="status-btn pendente" onclick="alterarStatus(this)">Pendente</button></td>
-                    <td><input type="text" class="observacao" placeholder="Digite uma observação..." oninput="salvarObservacao(this)"></td>
-                </tr>
-                <tr>
-                    <td>Ana Souza</td>
-                    <td>16/02/2025</td>
-                    <td>Rua B, 456</td>
-                    <td><button onclick="abrirMapa('Rua B, 456')">Ver no Mapa</button></td>
-                    <td>Roberto</td>
-                    <td><button class="status-btn realizado" onclick="alterarStatus(this)">Realizado</button></td>
-                    <td><input type="text" class="observacao" placeholder="Digite uma observação..." oninput="salvarObservacao(this)"></td>
-                </tr>
-            </tbody>
+            <tbody></tbody>
         </table>
-
-        <div style="margin-top: 20px;">
-            <a href="relatorios.html" style="padding: 10px 20px; background: #ff8c00; color: white; text-decoration: none; border-radius: 5px;">
-                Ver Relatórios
-            </a>
-        </div>
     </div>
 
     <script>
-        function abrirMapa(endereco) {
-            const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(endereco)}`;
-            window.open(url, '_blank');
-        }
+        document.getElementById("formAtendimento").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const atendimento = {
+                tipoServico: document.getElementById("tipoServico").value,
+                empresa: document.getElementById("empresa").value,
+                data: document.getElementById("data").value,
+                hora: document.getElementById("hora").value,
+                modelo: document.getElementById("modelo").value,
+                placa: document.getElementById("placa").value,
+                ano: document.getElementById("ano").value,
+                cor: document.getElementById("cor").value,
+                cliente: document.getElementById("cliente").value,
+                telefone: document.getElementById("telefone").value,
+                endereco: document.getElementById("endereco").value,
+                tecnico: document.getElementById("tecnico").value,
+                status: "Pendente",
+                observacao: ""
+            };
 
-        function alterarStatus(botao) {
-            if (botao.classList.contains("pendente")) {
-                botao.classList.remove("pendente");
-                botao.classList.add("realizado");
-                botao.innerText = "Realizado";
-            } else {
-                botao.classList.remove("realizado");
-                botao.classList.add("pendente");
-                botao.innerText = "Pendente";
-            }
-        }
+            let atendimentos = JSON.parse(localStorage.getItem("atendimentos")) || [];
+            atendimentos.push(atendimento);
+            localStorage.setItem("atendimentos", JSON.stringify(atendimentos));
+            atualizarTabela();
+            document.getElementById("formAtendimento").reset();
+        });
 
-        function salvarObservacao(input) {
-            let index = input.parentElement.parentElement.rowIndex;
-            let observacao = input.value;
-            localStorage.setItem(`observacao_${index}`, observacao);
-        }
-
-        function carregarObservacoes() {
-            document.querySelectorAll(".observacao").forEach((input, index) => {
-                let saved = localStorage.getItem(`observacao_${index + 1}`);
-                if (saved) input.value = saved;
+        function atualizarTabela() {
+            const tbody = document.querySelector("tbody");
+            tbody.innerHTML = "";
+            let atendimentos = JSON.parse(localStorage.getItem("atendimentos")) || [];
+            atendimentos.forEach((atendimento, index) => {
+                let row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${atendimento.tipoServico}</td>
+                    <td>${atendimento.empresa}</td>
+                    <td>${atendimento.data}</td>
+                    <td>${atendimento.hora}</td>
+                    <td>${atendimento.modelo}</td>
+                    <td>${atendimento.placa}</td>
+                    <td>${atendimento.ano}</td>
+                    <td>${atendimento.cor}</td>
+                    <td>${atendimento.cliente}</td>
+                    <td>${atendimento.telefone}</td>
+                    <td>${atendimento.endereco}</td>
+                    <td><button onclick="abrirMapa('${atendimento.endereco}')">Ver no Mapa</button></td>
+                    <td>${atendimento.tecnico}</td>
+                    <td><button class="status-btn pendente" onclick="alterarStatus(this)">${atendimento.status}</button></td>
+                    <td><input type="text" class="observacao" value="${atendimento.observacao}" oninput="salvarObservacao(this, ${index})"></td>
+                `;
             });
         }
-
-        window.onload = carregarObservacoes;
+        window.onload = atualizarTabela;
     </script>
-
 </body>
 </html>

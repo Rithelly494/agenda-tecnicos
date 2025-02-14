@@ -119,18 +119,17 @@
             const username = document.getElementById("username").value;
             const password = document.getElementById("password").value;
 
-            // Lista de usuários cadastrados e seus níveis de acesso
-            const users = {
-                "admin": { senha: "admin123", tipo: "admin" },
-                "tecnico1": { senha: "senha123", tipo: "tecnico" },
-                "tecnico2": { senha: "senha456", tipo: "tecnico" }
-            };
+            // Obter a lista de usuários cadastrados
+            let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
 
-            if (users[username] && users[username].senha === password) {
+            // Verificar se o usuário existe e a senha está correta
+            const user = usuarios.find(u => u.username === username && u.password === password);
+
+            if (user) {
                 alert("Login bem-sucedido!");
 
                 // Redireciona para o painel correto
-                if (users[username].tipo === "admin") {
+                if (user.tipo === "admin") {
                     window.location.href = "painel.html";
                 } else {
                     window.location.href = "painel_tecnico.html";
