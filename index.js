@@ -6,9 +6,9 @@ const port = process.env.PORT || 3000;
 // Servindo arquivos estáticos
 app.use(express.static(__dirname));
 
-// Redireciona para a página de login por padrão
+// Redireciona automaticamente para a tela de login
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "login.html"));
+    res.redirect("/login.html");
 });
 
 app.listen(port, () => {
