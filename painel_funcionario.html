@@ -130,6 +130,33 @@
                     <option value="17:00">17:00</option>
                 </select>
             </div>
+<div class="form-group">
+    <label>Data:</label>
+    <input type="date" id="data">
+    <label>Horário:</label>
+    <select id="horario">
+        <option value="">Selecione um horário</option>
+        <option value="08:00">08:00</option>
+        <option value="09:00">09:00</option>
+        <option value="10:00">10:00</option>
+        <option value="11:00">11:00</option>
+        <option value="13:00">13:00</option>
+        <option value="14:00">14:00</option>
+        <option value="15:00">15:00</option>
+        <option value="16:00">16:00</option>
+        <option value="17:00">17:00</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label>Técnico Responsável:</label>
+    <select id="tecnico">
+        <option value="">Selecione</option>
+        <option value="Bruno">Bruno</option>
+        <option value="Cleber">Cleber</option>
+        <option value="Romario">Romario</option>
+    </select>
+</div>
 
             <div class="form-group">
                 <label>Nome do Cliente:</label>
@@ -182,6 +209,8 @@
             let endereco = document.getElementById("endereco").value;
             let modelo = document.getElementById("modelo").value;
             let ano = document.getElementById("ano").value;
+	    let tecnico = document.getElementById("tecnico").value;
+
             
             if (!tipoServico || !empresa || !data || !horario || !cliente || !telefone || !endereco || !modelo || !ano) {
                 alert("Preencha todos os campos obrigatórios!");
@@ -190,7 +219,8 @@
 
             let tabela = document.getElementById("tabelaServicos");
             let linha = tabela.insertRow();
-            linha.innerHTML = `<td>${data}</td><td>${horario}</td><td>Bruno</td><td>${cliente}</td><td>Pendente</td>`;
+            linha.innerHTML = `<td>${data}</td><td>${horario}</td><td>${tecnico}</td><td>${cliente}</td><td>Pendente</td>`;
+
             
             alert("Serviço adicionado com sucesso!");
         }
