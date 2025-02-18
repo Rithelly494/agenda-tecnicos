@@ -38,13 +38,18 @@
         .form-group {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             margin-bottom: 10px;
+            width: 100%;
         }
         .form-group label {
+            width: 150px;
+            text-align: right;
             font-weight: bold;
+            margin-right: 10px;
         }
         .form-group input, .form-group select {
-            width: 48%;
+            flex: 1;
             padding: 8px;
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -65,20 +70,24 @@
         .button:hover {
             background: #E65C00;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-        th, td {
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: center;
-        }
-        th {
-            background: #FF7700;
-            color: white;
-        }
+input[type="url"] {
+    border: 1px solid #ccc;
+    padding: 8px;
+    border-radius: 5px;
+    width: 100%;
+}
+#campoLink {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+#linkLocalizacao {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
     </style>
 </head>
 <body>
@@ -130,46 +139,72 @@
                     <option value="17:00">17:00</option>
                 </select>
             </div>
-<div class="form-group">
-    <label>Data:</label>
-    <input type="date" id="data">
-    <label>Horário:</label>
-    <select id="horario">
-        <option value="">Selecione um horário</option>
-        <option value="08:00">08:00</option>
-        <option value="09:00">09:00</option>
-        <option value="10:00">10:00</option>
-        <option value="11:00">11:00</option>
-        <option value="13:00">13:00</option>
-        <option value="14:00">14:00</option>
-        <option value="15:00">15:00</option>
-        <option value="16:00">16:00</option>
-        <option value="17:00">17:00</option>
-    </select>
-</div>
 
-<div class="form-group">
-    <label>Técnico Responsável:</label>
-    <select id="tecnico">
-        <option value="">Selecione</option>
-        <option value="Bruno">Bruno</option>
-        <option value="Cleber">Cleber</option>
-        <option value="Romario">Romario</option>
-    </select>
-</div>
+            <div class="form-group">
+                <label>Técnico Responsável:</label>
+                <select id="tecnico">
+                    <option value="">Selecione</option>
+                    <option value="Bruno">Bruno</option>
+                    <option value="Cleber">Cleber</option>
+                    <option value="Romario">Romario</option>
+                </select>
+            </div>
 
             <div class="form-group">
                 <label>Nome do Cliente:</label>
-                <input type="text" id="cliente">
+                <input type="text" id="cliente" placeholder="Nome e Sobrenome">
                 <label>Telefone:</label>
-                <input type="text" id="telefone">
+                <input type="text" id="telefone" placeholder="(99) 99999-9999" oninput="formatarTelefone(this)">
             </div>
 
             <div class="form-group">
-                <label>Endereço:</label>
-                <input type="text" id="endereco" class="full-width">
-            </div>
+    <label>Endereço:</label>
+    <select id="tipoEndereco" onchange="alternarEndereco()">
+        <option value="">Selecione uma opção</option>
+        <option value="digitado">Endereço Digitado</option>
+        <option value="link">Localização via Link</option>
+    </select>
+</div>
 
+<!-- Campos do endereço digitado -->
+<div id="campoEndereco" style="display: none;">
+    <div class="form-group">
+        <label>Rua:</label>
+        <input type="text" id="rua" placeholder="Rua">
+        <label>Número:</label>
+        <input type="text" id="numero" placeholder="Número">
+    </div>
+    <div class="form-group">
+        <label>Bairro:</label>
+        <input type="text" id="bairro" placeholder="Bairro">
+        <label>Cidade:</label>
+        <input type="text" id="cidade" placeholder="Cidade">
+    </div>
+    
+    <!-- Seleção de condomínio -->
+    <div class="form-group">
+        <label>Condomínio?</label>
+        <select id="ehCondominio" onchange="toggleCondominio()">
+            <option value="">Selecione</option>
+            <option value="nao">Não</option>
+            <option value="sim">Sim</option>
+        </select>
+    </div>
+
+    <!-- Campos de Bloco e Apartamento (exibidos apenas se for condomínio) -->
+    <div class="form-group" id="campoCondominio" style="display: none;">
+        <label>Bloco:</label>
+        <input type="text" id="bloco" placeholder="Bloco">
+        <label>Apartamento:</label>
+        <input type="text" id="apartamento" placeholder="Apartamento">
+    </div>
+</div>
+
+<!-- Campo para link de localização -->
+<div class="form-group" id="campoLink" style="display: none; align-items: center;">
+    <label for="linkLocalizacao" style="flex: 0 0 200px; text-align: right;">Localização via Link:</label>
+    <input type="url" id="linkLocalizacao" class="full-width" placeholder="Cole aqui o link da localização" onblur="validarLink()">
+</div>
             <div class="form-group">
                 <label>Modelo do Veículo:</label>
                 <input type="text" id="modelo">
@@ -179,53 +214,160 @@
                 <input type="text" id="placa">
             </div>
 
+            <!-- NOVOS CAMPOS -->
+            <div class="form-group">
+                <label>Observações:</label>
+                <input type="text" id="observacoes" class="full-width">
+            </div>
+
+            <div class="form-group">
+                <label>Valor a Receber:</label>
+                <input type="number" id="valorReceber" placeholder="R$ 0,00">
+            </div>
+            <!-- FIM NOVOS CAMPOS -->
+
             <button class="button" onclick="adicionarServico()">Adicionar Serviço</button>
 
-            <h3>Agenda de Serviços</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Data</th>
-                        <th>Horário</th>
-                        <th>Técnico</th>
-                        <th>Cliente</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="tabelaServicos">
-                </tbody>
-            </table>
         </div>
     </div>
 
     <script>
         function adicionarServico() {
-            let tipoServico = document.getElementById("tipoServico").value;
-            let empresa = document.getElementById("empresa").value;
-            let data = document.getElementById("data").value;
-            let horario = document.getElementById("horario").value;
-            let cliente = document.getElementById("cliente").value;
-            let telefone = document.getElementById("telefone").value;
-            let endereco = document.getElementById("endereco").value;
-            let modelo = document.getElementById("modelo").value;
-            let ano = document.getElementById("ano").value;
-	    let tecnico = document.getElementById("tecnico").value;
+    // Captura os valores dos campos
+    let tipoServico = document.getElementById("tipoServico").value;
+    let empresa = document.getElementById("empresa").value;
+    let data = document.getElementById("data").value;
+    let horario = document.getElementById("horario").value;
+    let tecnico = document.getElementById("tecnico").value;
+    let cliente = document.getElementById("cliente").value.trim();
+    let telefone = document.getElementById("telefone").value;
+    let tipoEndereco = document.getElementById("tipoEndereco").value;
+    let modelo = document.getElementById("modelo").value;
+    let ano = document.getElementById("ano").value;
+    let placa = document.getElementById("placa").value;
+    let observacoes = document.getElementById("observacoes").value;
+    let valorReceber = document.getElementById("valorReceber").value;
 
-            
-            if (!tipoServico || !empresa || !data || !horario || !cliente || !telefone || !endereco || !modelo || !ano) {
-                alert("Preencha todos os campos obrigatórios!");
-                return;
-            }
+    // Captura os valores do endereço
+    let rua = document.getElementById("rua") ? document.getElementById("rua").value.trim() : "";
+    let numero = document.getElementById("numero") ? document.getElementById("numero").value.trim() : "";
+    let bairro = document.getElementById("bairro") ? document.getElementById("bairro").value.trim() : "";
+    let cidade = document.getElementById("cidade") ? document.getElementById("cidade").value.trim() : "";
+    let ehCondominio = document.getElementById("ehCondominio") ? document.getElementById("ehCondominio").value : "";
+    let bloco = document.getElementById("bloco") ? document.getElementById("bloco").value.trim() : "";
+    let apartamento = document.getElementById("apartamento") ? document.getElementById("apartamento").value.trim() : "";
 
-            let tabela = document.getElementById("tabelaServicos");
-            let linha = tabela.insertRow();
-            linha.innerHTML = `<td>${data}</td><td>${horario}</td><td>${tecnico}</td><td>${cliente}</td><td>Pendente</td>`;
+    // Captura o valor do link de localização
+    let linkLocalizacao = document.getElementById("linkLocalizacao") ? document.getElementById("linkLocalizacao").value.trim() : "";
 
-            
-            alert("Serviço adicionado com sucesso!");
+    // Expressão regular para validar nome e sobrenome corretamente
+    let nomeValido = /^[A-ZÀ-Ú][a-zà-ú]+\s[A-ZÀ-Ú][a-zà-ú]+$/;
+
+    // Verifica se todos os campos obrigatórios foram preenchidos
+    if (!tipoServico || !empresa || !data || !horario || !tecnico || !cliente || !telefone || !modelo || !ano || !observacoes || !valorReceber) {
+        alert("Preencha todos os campos obrigatórios!");
+        return;
+    }
+
+    // Validação do nome do cliente
+    if (!nomeValido.test(cliente)) {
+        alert("Por favor, insira um Nome e Sobrenome válidos. Exemplo: 'Rithelly Santos'");
+        return;
+    }
+
+    // Validação do endereço ou link de localização
+    if (tipoEndereco === "digitado") {
+        if (!rua || !numero || !bairro || !cidade) {
+            alert("Preencha Rua, Número, Bairro e Cidade corretamente.");
+            return;
         }
+        if (ehCondominio === "sim" && (!bloco || !apartamento)) {
+            alert("Se for condomínio, preencha Bloco e Apartamento.");
+            return;
+        }
+    } else if (tipoEndereco === "link") {
+        let regexLink = /^(https?:\/\/)?(www\.)?(google\.com\/maps|goo\.gl\/maps|waze\.com)\/.+$/;
+        if (!regexLink.test(linkLocalizacao)) {
+            alert("Por favor, insira um link válido de localização do Google Maps ou Waze.");
+            return;
+        }
+    } else {
+        alert("Selecione um tipo de endereço válido.");
+        return;
+    }
+
+    // Mensagem de sucesso
+    alert("Serviço adicionado com sucesso!");
+}
+
+function formatarTelefone(campo) {
+    let numero = campo.value.replace(/\D/g, ""); // Remove caracteres não numéricos
+    if (numero.length > 11) numero = numero.slice(0, 11); // Limita a 11 dígitos
+
+    if (numero.length > 10) {
+        campo.value = `(${numero.substring(0, 2)}) ${numero.substring(2, 7)}-${numero.substring(7, 11)}`;
+    } else if (numero.length > 6) {
+        campo.value = `(${numero.substring(0, 2)}) ${numero.substring(2, 6)}-${numero.substring(6, 10)}`;
+    } else if (numero.length > 2) {
+        campo.value = `(${numero.substring(0, 2)}) ${numero.substring(2)}`;
+    } else if (numero.length > 0) {
+        campo.value = `(${numero}`;
+    }
+}
+
+function toggleCondominio() {
+    let ehCondominio = document.getElementById("ehCondominio").value;
+    let campoCondominio = document.getElementById("campoCondominio");
+
+    if (ehCondominio === "sim") {
+        campoCondominio.style.display = "flex"; // Exibe os campos Bloco e Apartamento
+    } else {
+        campoCondominio.style.display = "none"; // Esconde os campos Bloco e Apartamento
+    }
+}
+
+
+function alternarEndereco() {
+    let tipoEndereco = document.getElementById("tipoEndereco").value;
+    let campoEndereco = document.getElementById("campoEndereco");
+    let campoLink = document.getElementById("campoLink");
+    let campoCondominio = document.getElementById("campoCondominio");
+
+    if (tipoEndereco === "digitado") {
+        campoEndereco.style.display = "block"; // Exibe os campos do endereço digitado
+        campoLink.style.display = "none"; // Esconde o campo de link
+    } else if (tipoEndereco === "link") {
+        campoEndereco.style.display = "none"; // Esconde os campos do endereço digitado
+        campoCondominio.style.display = "none"; // Esconde os campos do condomínio
+        campoLink.style.display = "block"; // Exibe o campo de link
+    } else {
+        campoEndereco.style.display = "none"; // Oculta tudo se nada for selecionado
+        campoLink.style.display = "none";
+        campoCondominio.style.display = "none";
+    }
+}
+
+window.onload = function () {
+    document.getElementById("campoEndereco").style.display = "none";
+    document.getElementById("campoCondominio").style.display = "none";
+    document.getElementById("campoLink").style.display = "none";
+};
+
+function validarLink() {
+    let campoLink = document.getElementById("linkLocalizacao");
+    let link = campoLink.value.trim();
+    
+    // Expressão regular para validar links do Google Maps, Waze e links comuns
+    let regexLink = /^(https?:\/\/)?(www\.)?(google\.com\/maps|goo\.gl\/maps|waze\.com|maps\.apple\.com)\/.+$/;
+
+    if (link && !regexLink.test(link)) {
+        alert("Por favor, insira um link válido do Google Maps, Waze ou Apple Maps.");
+        campoLink.value = ""; // Limpa o campo se for inválido
+        campoLink.focus(); // Foca no campo para o usuário corrigir
+    }
+}
+
     </script>
 
 </body>
 </html>
-
