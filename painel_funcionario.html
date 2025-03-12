@@ -70,28 +70,76 @@
         .button:hover {
             background: #E65C00;
         }
-input[type="url"] {
-    border: 1px solid #ccc;
-    padding: 8px;
-    border-radius: 5px;
-    width: 100%;
-}
-#campoLink {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-}
-
-#linkLocalizacao {
-    flex: 1;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
+        input[type="url"] {
+            border: 1px solid #ccc;
+            padding: 8px;
+            border-radius: 5px;
+            width: 100%;
+        }
+        #campoLink {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+        .servico-item {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background: #f9f9f9;
+            text-align: left;
+            position: relative;
+        }
+        .servico-item.hoje {
+            border: 2px solid #FF7700;
+            background: #fff5e6;
+        }
+        .tecnico-section {
+            margin: 20px 0;
+        }
+        .tecnico-section h3 {
+            background: #FF7700;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .filtro-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+        .filtro-group select, .filtro-group input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 23%;
+        }
+        .filtro-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .remove-button, .edit-button {
+            background: #E65C00;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .remove-button:hover, .edit-button:hover {
+            background: #FF7700;
+        }
+        .servico-item .buttons {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
     </style>
 </head>
 <body>
-
     <div class="container">
         <div class="tabs">
             <div class="tab active" onclick="mostrarAba('agenda')">Agenda de Serviços</div>
@@ -99,8 +147,8 @@ input[type="url"] {
         </div>
 
         <div id="agenda" class="aba">
-            <h2>Adicionar Novo Serviço</h2>
-            
+            <h2 id="tituloAgenda">Adicionar Novo Serviço</h2>
+
             <div class="form-group">
                 <label>Tipo de Serviço:</label>
                 <select id="tipoServico">
@@ -148,6 +196,12 @@ input[type="url"] {
                     <option value="Cleber">Cleber</option>
                     <option value="Romario">Romario</option>
                 </select>
+                <label>Status:</label>
+                <select id="status">
+                    <option value="Pendente">Pendente</option>
+                    <option value="Concluído">Concluído</option>
+                    <option value="Cancelado">Cancelado</option>
+                </select>
             </div>
 
             <div class="form-group">
@@ -158,53 +212,48 @@ input[type="url"] {
             </div>
 
             <div class="form-group">
-    <label>Endereço:</label>
-    <select id="tipoEndereco" onchange="alternarEndereco()">
-        <option value="">Selecione uma opção</option>
-        <option value="digitado">Endereço Digitado</option>
-        <option value="link">Localização via Link</option>
-    </select>
-</div>
+                <label>Endereço:</label>
+                <select id="tipoEndereco" onchange="alternarEndereco()">
+                    <option value="">Selecione uma opção</option>
+                    <option value="digitado">Endereço Digitado</option>
+                    <option value="link">Localização via Link</option>
+                </select>
+            </div>
 
-<!-- Campos do endereço digitado -->
-<div id="campoEndereco" style="display: none;">
-    <div class="form-group">
-        <label>Rua:</label>
-        <input type="text" id="rua" placeholder="Rua">
-        <label>Número:</label>
-        <input type="text" id="numero" placeholder="Número">
-    </div>
-    <div class="form-group">
-        <label>Bairro:</label>
-        <input type="text" id="bairro" placeholder="Bairro">
-        <label>Cidade:</label>
-        <input type="text" id="cidade" placeholder="Cidade">
-    </div>
-    
-    <!-- Seleção de condomínio -->
-    <div class="form-group">
-        <label>Condomínio?</label>
-        <select id="ehCondominio" onchange="toggleCondominio()">
-            <option value="">Selecione</option>
-            <option value="nao">Não</option>
-            <option value="sim">Sim</option>
-        </select>
-    </div>
+            <div id="campoEndereco" style="display: none;">
+                <div class="form-group">
+                    <label>Rua:</label>
+                    <input type="text" id="rua" placeholder="Rua">
+                    <label>Número:</label>
+                    <input type="text" id="numero" placeholder="Número">
+                </div>
+                <div class="form-group">
+                    <label>Bairro:</label>
+                    <input type="text" id="bairro" placeholder="Bairro">
+                    <label>Cidade:</label>
+                    <input type="text" id="cidade" placeholder="Cidade">
+                </div>
+                <div class="form-group">
+                    <label>Condomínio?</label>
+                    <select id="ehCondominio" onchange="toggleCondominio()">
+                        <option value="">Selecione</option>
+                        <option value="nao">Não</option>
+                        <option value="sim">Sim</option>
+                    </select>
+                </div>
+                <div class="form-group" id="campoCondominio" style="display: none;">
+                    <label>Bloco:</label>
+                    <input type="text" id="bloco" placeholder="Bloco">
+                    <label>Apartamento:</label>
+                    <input type="text" id="apartamento" placeholder="Apartamento">
+                </div>
+            </div>
 
-    <!-- Campos de Bloco e Apartamento (exibidos apenas se for condomínio) -->
-    <div class="form-group" id="campoCondominio" style="display: none;">
-        <label>Bloco:</label>
-        <input type="text" id="bloco" placeholder="Bloco">
-        <label>Apartamento:</label>
-        <input type="text" id="apartamento" placeholder="Apartamento">
-    </div>
-</div>
+            <div class="form-group" id="campoLink" style="display: none; align-items: center;">
+                <label for="linkLocalizacao" style="flex: 0 0 200px; text-align: right;">Localização via Link:</label>
+                <input type="url" id="linkLocalizacao" class="full-width" placeholder="Cole aqui o link da localização" onblur="validarLink()">
+            </div>
 
-<!-- Campo para link de localização -->
-<div class="form-group" id="campoLink" style="display: none; align-items: center;">
-    <label for="linkLocalizacao" style="flex: 0 0 200px; text-align: right;">Localização via Link:</label>
-    <input type="url" id="linkLocalizacao" class="full-width" placeholder="Cole aqui o link da localização" onblur="validarLink()">
-</div>
             <div class="form-group">
                 <label>Modelo do Veículo:</label>
                 <input type="text" id="modelo">
@@ -214,7 +263,6 @@ input[type="url"] {
                 <input type="text" id="placa">
             </div>
 
-            <!-- NOVOS CAMPOS -->
             <div class="form-group">
                 <label>Observações:</label>
                 <input type="text" id="observacoes" class="full-width">
@@ -224,150 +272,372 @@ input[type="url"] {
                 <label>Valor a Receber:</label>
                 <input type="number" id="valorReceber" placeholder="R$ 0,00">
             </div>
-            <!-- FIM NOVOS CAMPOS -->
 
-            <button class="button" onclick="adicionarServico()">Adicionar Serviço</button>
+            <button class="button" id="botaoAcao" onclick="adicionarServico()">Adicionar Serviço</button>
+        </div>
 
+        <div id="realizados" class="aba" style="display: none;">
+            <h2>Agendamentos Realizados</h2>
+            <div class="filtro-group">
+                <select id="filtroTecnico">
+                    <option value="">Todos os Técnicos</option>
+                    <option value="Bruno">Bruno</option>
+                    <option value="Cleber">Cleber</option>
+                    <option value="Romario">Romario</option>
+                </select>
+                <input type="date" id="filtroData" placeholder="Filtrar por Data">
+                <select id="filtroTipoServico">
+                    <option value="">Todos os Tipos</option>
+                    <option value="Instalação">Instalação</option>
+                    <option value="Manutenção">Manutenção</option>
+                    <option value="Retirada">Retirada</option>
+                    <option value="Reinstalação">Reinstalação</option>
+                    <option value="Entrega de Carnê">Entrega de Carnê</option>
+                    <option value="Passar o Cartão">Passar o Cartão</option>
+                </select>
+                <select id="filtroStatus">
+                    <option value="">Todos os Status</option>
+                    <option value="Pendente">Pendente</option>
+                    <option value="Concluído">Concluído</option>
+                    <option value="Cancelado">Cancelado</option>
+                </select>
+            </div>
+            <div class="filtro-group">
+                <input type="text" id="filtroCliente" placeholder="Buscar por Nome do Cliente" style="width: 100%;">
+            </div>
+            <div class="filtro-buttons">
+                <button class="button" onclick="aplicarFiltros()">Filtrar</button>
+                <button class="button" onclick="limparFiltros()">Limpar Filtros</button>
+            </div>
+            <div id="listaServicos"></div>
         </div>
     </div>
 
     <script>
+        let editIndex = null;
+        const dataAtual = "2025-03-11"; // Data fixa conforme o contexto (11 de março de 2025)
+
         function adicionarServico() {
-    // Captura os valores dos campos
-    let tipoServico = document.getElementById("tipoServico").value;
-    let empresa = document.getElementById("empresa").value;
-    let data = document.getElementById("data").value;
-    let horario = document.getElementById("horario").value;
-    let tecnico = document.getElementById("tecnico").value;
-    let cliente = document.getElementById("cliente").value.trim();
-    let telefone = document.getElementById("telefone").value;
-    let tipoEndereco = document.getElementById("tipoEndereco").value;
-    let modelo = document.getElementById("modelo").value;
-    let ano = document.getElementById("ano").value;
-    let placa = document.getElementById("placa").value;
-    let observacoes = document.getElementById("observacoes").value;
-    let valorReceber = document.getElementById("valorReceber").value;
+            let tipoServico = document.getElementById("tipoServico").value;
+            let empresa = document.getElementById("empresa").value;
+            let data = document.getElementById("data").value;
+            let horario = document.getElementById("horario").value;
+            let tecnico = document.getElementById("tecnico").value;
+            let status = document.getElementById("status").value;
+            let cliente = document.getElementById("cliente").value.trim();
+            let telefone = document.getElementById("telefone").value;
+            let tipoEndereco = document.getElementById("tipoEndereco").value;
+            let modelo = document.getElementById("modelo").value;
+            let ano = document.getElementById("ano").value;
+            let placa = document.getElementById("placa").value;
+            let observacoes = document.getElementById("observacoes").value;
+            let valorReceber = document.getElementById("valorReceber").value;
 
-    // Captura os valores do endereço
-    let rua = document.getElementById("rua") ? document.getElementById("rua").value.trim() : "";
-    let numero = document.getElementById("numero") ? document.getElementById("numero").value.trim() : "";
-    let bairro = document.getElementById("bairro") ? document.getElementById("bairro").value.trim() : "";
-    let cidade = document.getElementById("cidade") ? document.getElementById("cidade").value.trim() : "";
-    let ehCondominio = document.getElementById("ehCondominio") ? document.getElementById("ehCondominio").value : "";
-    let bloco = document.getElementById("bloco") ? document.getElementById("bloco").value.trim() : "";
-    let apartamento = document.getElementById("apartamento") ? document.getElementById("apartamento").value.trim() : "";
+            let rua = document.getElementById("rua")?.value.trim() || "";
+            let numero = document.getElementById("numero")?.value.trim() || "";
+            let bairro = document.getElementById("bairro")?.value.trim() || "";
+            let cidade = document.getElementById("cidade")?.value.trim() || "";
+            let ehCondominio = document.getElementById("ehCondominio")?.value || "";
+            let bloco = document.getElementById("bloco")?.value.trim() || "";
+            let apartamento = document.getElementById("apartamento")?.value.trim() || "";
+            let linkLocalizacao = document.getElementById("linkLocalizacao")?.value.trim() || "";
 
-    // Captura o valor do link de localização
-    let linkLocalizacao = document.getElementById("linkLocalizacao") ? document.getElementById("linkLocalizacao").value.trim() : "";
+            let nomeValido = /^[A-ZÀ-Ú][a-zà-ú]+\s[A-ZÀ-Ú][a-zà-ú]+$/;
 
-    // Expressão regular para validar nome e sobrenome corretamente
-    let nomeValido = /^[A-ZÀ-Ú][a-zà-ú]+\s[A-ZÀ-Ú][a-zà-ú]+$/;
+            if (!tipoServico || !empresa || !data || !horario || !tecnico || !cliente || !telefone || !modelo || !ano || !observacoes || !valorReceber) {
+                alert("Preencha todos os campos obrigatórios!");
+                return;
+            }
 
-    // Verifica se todos os campos obrigatórios foram preenchidos
-    if (!tipoServico || !empresa || !data || !horario || !tecnico || !cliente || !telefone || !modelo || !ano || !observacoes || !valorReceber) {
-        alert("Preencha todos os campos obrigatórios!");
-        return;
-    }
+            if (!nomeValido.test(cliente)) {
+                alert("Por favor, insira um Nome e Sobrenome válidos. Exemplo: 'Rithelly Santos'");
+                return;
+            }
 
-    // Validação do nome do cliente
-    if (!nomeValido.test(cliente)) {
-        alert("Por favor, insira um Nome e Sobrenome válidos. Exemplo: 'Rithelly Santos'");
-        return;
-    }
+            if (tipoEndereco === "digitado") {
+                if (!rua || !numero || !bairro || !cidade) {
+                    alert("Preencha Rua, Número, Bairro e Cidade corretamente.");
+                    return;
+                }
+                if (ehCondominio === "sim" && (!bloco || !apartamento)) {
+                    alert("Se for condomínio, preencha Bloco e Apartamento.");
+                    return;
+                }
+            } else if (tipoEndereco === "link") {
+                let regexLink = /^(https?:\/\/)?(www\.)?(google\.com\/maps|goo\.gl\/maps|waze\.com)\/.+$/;
+                if (!regexLink.test(linkLocalizacao)) {
+                    alert("Por favor, insira um link válido de localização do Google Maps ou Waze.");
+                    return;
+                }
+            } else {
+                alert("Selecione um tipo de endereço válido.");
+                return;
+            }
 
-    // Validação do endereço ou link de localização
-    if (tipoEndereco === "digitado") {
-        if (!rua || !numero || !bairro || !cidade) {
-            alert("Preencha Rua, Número, Bairro e Cidade corretamente.");
-            return;
+            let servicos = JSON.parse(localStorage.getItem("servicos") || "[]");
+            if (servicos.some((s, i) => s.tecnico === tecnico && s.data === data && s.horario === horario && i !== editIndex)) {
+                alert("Este técnico já tem um serviço agendado para este horário!");
+                return;
+            }
+
+            let servico = {
+                tipoServico, empresa, data, horario, tecnico, status, cliente, telefone,
+                tipoEndereco, modelo, ano, placa, observacoes, valorReceber,
+                endereco: tipoEndereco === "digitado" ? { rua, numero, bairro, cidade, ehCondominio, bloco, apartamento } : { linkLocalizacao }
+            };
+
+            if (editIndex !== null) {
+                servicos[editIndex] = servico;
+                editIndex = null;
+                document.getElementById("tituloAgenda").textContent = "Adicionar Novo Serviço";
+                document.getElementById("botaoAcao").textContent = "Adicionar Serviço";
+                document.getElementById("botaoAcao").onclick = adicionarServico;
+            } else {
+                servicos.push(servico);
+            }
+
+            localStorage.setItem("servicos", JSON.stringify(servicos));
+            limparFormulario();
+            atualizarListaServicos();
+            mostrarAba("realizados");
+            alert(editIndex === null ? "Serviço adicionado com sucesso!" : "Serviço atualizado com sucesso!");
         }
-        if (ehCondominio === "sim" && (!bloco || !apartamento)) {
-            alert("Se for condomínio, preencha Bloco e Apartamento.");
-            return;
+
+        function limparFormulario() {
+            document.getElementById("tipoServico").value = "";
+            document.getElementById("empresa").value = "";
+            document.getElementById("data").value = "";
+            document.getElementById("horario").value = "";
+            document.getElementById("tecnico").value = "";
+            document.getElementById("status").value = "Pendente";
+            document.getElementById("cliente").value = "";
+            document.getElementById("telefone").value = "";
+            document.getElementById("tipoEndereco").value = "";
+            document.getElementById("modelo").value = "";
+            document.getElementById("ano").value = "";
+            document.getElementById("placa").value = "";
+            document.getElementById("observacoes").value = "";
+            document.getElementById("valorReceber").value = "";
+            document.getElementById("rua").value = "";
+            document.getElementById("numero").value = "";
+            document.getElementById("bairro").value = "";
+            document.getElementById("cidade").value = "";
+            document.getElementById("ehCondominio").value = "";
+            document.getElementById("bloco").value = "";
+            document.getElementById("apartamento").value = "";
+            document.getElementById("linkLocalizacao").value = "";
+            document.getElementById("campoEndereco").style.display = "none";
+            document.getElementById("campoLink").style.display = "none";
+            document.getElementById("campoCondominio").style.display = "none";
         }
-    } else if (tipoEndereco === "link") {
-        let regexLink = /^(https?:\/\/)?(www\.)?(google\.com\/maps|goo\.gl\/maps|waze\.com)\/.+$/;
-        if (!regexLink.test(linkLocalizacao)) {
-            alert("Por favor, insira um link válido de localização do Google Maps ou Waze.");
-            return;
+
+        function formatarTelefone(campo) {
+            let numero = campo.value.replace(/\D/g, "");
+            if (numero.length > 11) numero = numero.slice(0, 11);
+
+            if (numero.length > 10) {
+                campo.value = "(" + numero.substring(0, 2) + ") " + numero.substring(2, 7) + "-" + numero.substring(7, 11);
+            } else if (numero.length > 6) {
+                campo.value = "(" + numero.substring(0, 2) + ") " + numero.substring(2, 6) + "-" + numero.substring(6);
+            } else if (numero.length > 2) {
+                campo.value = "(" + numero.substring(0, 2) + ") " + numero.substring(2);
+            } else if (numero.length > 0) {
+                campo.value = "(" + numero;
+            }
         }
-    } else {
-        alert("Selecione um tipo de endereço válido.");
-        return;
-    }
 
-    // Mensagem de sucesso
-    alert("Serviço adicionado com sucesso!");
-}
+        function toggleCondominio() {
+            let ehCondominio = document.getElementById("ehCondominio").value;
+            let campoCondominio = document.getElementById("campoCondominio");
+            campoCondominio.style.display = ehCondominio === "sim" ? "flex" : "none";
+        }
 
-function formatarTelefone(campo) {
-    let numero = campo.value.replace(/\D/g, ""); // Remove caracteres não numéricos
-    if (numero.length > 11) numero = numero.slice(0, 11); // Limita a 11 dígitos
+        function alternarEndereco() {
+            let tipoEndereco = document.getElementById("tipoEndereco").value;
+            let campoEndereco = document.getElementById("campoEndereco");
+            let campoLink = document.getElementById("campoLink");
+            let campoCondominio = document.getElementById("campoCondominio");
 
-    if (numero.length > 10) {
-        campo.value = `(${numero.substring(0, 2)}) ${numero.substring(2, 7)}-${numero.substring(7, 11)}`;
-    } else if (numero.length > 6) {
-        campo.value = `(${numero.substring(0, 2)}) ${numero.substring(2, 6)}-${numero.substring(6, 10)}`;
-    } else if (numero.length > 2) {
-        campo.value = `(${numero.substring(0, 2)}) ${numero.substring(2)}`;
-    } else if (numero.length > 0) {
-        campo.value = `(${numero}`;
-    }
-}
+            if (tipoEndereco === "digitado") {
+                campoEndereco.style.display = "block";
+                campoLink.style.display = "none";
+            } else if (tipoEndereco === "link") {
+                campoEndereco.style.display = "none";
+                campoCondominio.style.display = "none";
+                campoLink.style.display = "block";
+            } else {
+                campoEndereco.style.display = "none";
+                campoLink.style.display = "none";
+                campoCondominio.style.display = "none";
+            }
+        }
 
-function toggleCondominio() {
-    let ehCondominio = document.getElementById("ehCondominio").value;
-    let campoCondominio = document.getElementById("campoCondominio");
+        function validarLink() {
+            let campoLink = document.getElementById("linkLocalizacao");
+            let link = campoLink.value.trim();
+            let regexLink = /^(https?:\/\/)?(www\.)?(google\.com\/maps|goo\.gl\/maps|waze\.com|maps\.apple\.com)\/.+$/;
 
-    if (ehCondominio === "sim") {
-        campoCondominio.style.display = "flex"; // Exibe os campos Bloco e Apartamento
-    } else {
-        campoCondominio.style.display = "none"; // Esconde os campos Bloco e Apartamento
-    }
-}
+            if (link && !regexLink.test(link)) {
+                alert("Por favor, insira um link válido do Google Maps, Waze ou Apple Maps.");
+                campoLink.value = "";
+                campoLink.focus();
+            }
+        }
 
+        function mostrarAba(aba) {
+            let abas = document.querySelectorAll(".tab");
+            abas.forEach(tab => tab.classList.remove("active"));
+            document.querySelector([onclick="mostrarAba('${aba}')"]).classList.add("active");
 
-function alternarEndereco() {
-    let tipoEndereco = document.getElementById("tipoEndereco").value;
-    let campoEndereco = document.getElementById("campoEndereco");
-    let campoLink = document.getElementById("campoLink");
-    let campoCondominio = document.getElementById("campoCondominio");
+            document.querySelectorAll(".aba").forEach(div => div.style.display = "none");
+            document.getElementById(aba).style.display = "block";
 
-    if (tipoEndereco === "digitado") {
-        campoEndereco.style.display = "block"; // Exibe os campos do endereço digitado
-        campoLink.style.display = "none"; // Esconde o campo de link
-    } else if (tipoEndereco === "link") {
-        campoEndereco.style.display = "none"; // Esconde os campos do endereço digitado
-        campoCondominio.style.display = "none"; // Esconde os campos do condomínio
-        campoLink.style.display = "block"; // Exibe o campo de link
-    } else {
-        campoEndereco.style.display = "none"; // Oculta tudo se nada for selecionado
-        campoLink.style.display = "none";
-        campoCondominio.style.display = "none";
-    }
-}
+            if (aba === "realizados") aplicarFiltros();
+        }
 
-window.onload = function () {
-    document.getElementById("campoEndereco").style.display = "none";
-    document.getElementById("campoCondominio").style.display = "none";
-    document.getElementById("campoLink").style.display = "none";
-};
+        function formatarData(data) {
+            let [ano, mes, dia] = data.split("-");
+            return ${dia}/${mes}/${ano};
+        }
 
-function validarLink() {
-    let campoLink = document.getElementById("linkLocalizacao");
-    let link = campoLink.value.trim();
-    
-    // Expressão regular para validar links do Google Maps, Waze e links comuns
-    let regexLink = /^(https?:\/\/)?(www\.)?(google\.com\/maps|goo\.gl\/maps|waze\.com|maps\.apple\.com)\/.+$/;
+        function atualizarListaServicos(filtros = {}) {
+            let listaServicos = document.getElementById("listaServicos");
+            let servicos = JSON.parse(localStorage.getItem("servicos") || "[]");
 
-    if (link && !regexLink.test(link)) {
-        alert("Por favor, insira um link válido do Google Maps, Waze ou Apple Maps.");
-        campoLink.value = ""; // Limpa o campo se for inválido
-        campoLink.focus(); // Foca no campo para o usuário corrigir
-    }
-}
+            let servicosFiltrados = servicos.filter(servico => {
+                return (
+                    (!filtros.tecnico || servico.tecnico === filtros.tecnico) &&
+                    (!filtros.data || servico.data === filtros.data) &&
+                    (!filtros.tipoServico || servico.tipoServico === filtros.tipoServico) &&
+                    (!filtros.status || servico.status === filtros.status) &&
+                    (!filtros.cliente || servico.cliente.toLowerCase().includes(filtros.cliente.toLowerCase()))
+                );
+            });
 
+            servicosFiltrados.sort((a, b) => {
+                let dataA = new Date(a.data + "T" + a.horario);
+                let dataB = new Date(b.data + "T" + b.horario);
+                return dataA - dataB;
+            });
+
+            let tecnicos = ["Bruno", "Cleber", "Romario"];
+            listaServicos.innerHTML = "";
+
+            tecnicos.forEach(tecnico => {
+                let servicosTecnico = servicosFiltrados.filter(s => s.tecnico === tecnico);
+                if (servicosTecnico.length > 0) {
+                    let section = document.createElement("div");
+                    section.className = "tecnico-section";
+                    section.innerHTML = <h3>${tecnico} (${servicosTecnico.length} serviços)</h3>;
+
+                    servicosTecnico.forEach((servico, index) => {
+                        let div = document.createElement("div");
+                        div.className = servico-item ${servico.data === dataAtual ? 'hoje' : ''};
+                        div.innerHTML = `
+                            <strong>Serviço #${index + 1}</strong><br>
+                            Tipo: ${servico.tipoServico}<br>
+                            Empresa: ${servico.empresa}<br>
+                            Data: ${formatarData(servico.data)} às ${servico.horario}<br>
+                            Status: ${servico.status}<br>
+                            Cliente: ${servico.cliente} - ${servico.telefone}<br>
+                            Endereço: ${servico.tipoEndereco === "digitado" 
+                                ? ${servico.endereco.rua}, ${servico.endereco.numero}, ${servico.endereco.bairro}, ${servico.endereco.cidade} 
+                                : <a href="${servico.endereco.linkLocalizacao}" target="_blank">Ver localização</a>}<br>
+                            Veículo: ${servico.modelo} (${servico.ano}) ${servico.placa ? "- " + servico.placa : ""}<br>
+                            Observações: ${servico.observacoes}<br>
+                            Valor: R$ ${servico.valorReceber}
+                            <div class="buttons">
+                                <button class="edit-button" onclick="editarServico(${servicos.indexOf(servico)})">Editar</button>
+                                <button class="remove-button" onclick="removerServico(${servicos.indexOf(servico)})">Remover</button>
+                            </div>
+                        `;
+                        section.appendChild(div);
+                    });
+
+                    listaServicos.appendChild(section);
+                }
+            });
+        }
+
+        function editarServico(index) {
+            let servicos = JSON.parse(localStorage.getItem("servicos") || "[]");
+            let servico = servicos[index];
+
+            document.getElementById("tipoServico").value = servico.tipoServico;
+            document.getElementById("empresa").value = servico.empresa;
+            document.getElementById("data").value = servico.data;
+            document.getElementById("horario").value = servico.horario;
+            document.getElementById("tecnico").value = servico.tecnico;
+            document.getElementById("status").value = servico.status;
+            document.getElementById("cliente").value = servico.cliente;
+            document.getElementById("telefone").value = servico.telefone;
+            document.getElementById("tipoEndereco").value = servico.tipoEndereco;
+            document.getElementById("modelo").value = servico.modelo;
+            document.getElementById("ano").value = servico.ano;
+            document.getElementById("placa").value = servico.placa;
+            document.getElementById("observacoes").value = servico.observacoes;
+            document.getElementById("valorReceber").value = servico.valorReceber;
+
+            if (servico.tipoEndereco === "digitado") {
+                document.getElementById("campoEndereco").style.display = "block";
+                document.getElementById("rua").value = servico.endereco.rua;
+                document.getElementById("numero").value = servico.endereco.numero;
+                document.getElementById("bairro").value = servico.endereco.bairro;
+                document.getElementById("cidade").value = servico.endereco.cidade;
+                document.getElementById("ehCondominio").value = servico.endereco.ehCondominio;
+                if (servico.endereco.ehCondominio === "sim") {
+                    document.getElementById("campoCondominio").style.display = "flex";
+                    document.getElementById("bloco").value = servico.endereco.bloco;
+                    document.getElementById("apartamento").value = servico.endereco.apartamento;
+                }
+            } else if (servico.tipoEndereco === "link") {
+                document.getElementById("campoLink").style.display = "block";
+                document.getElementById("linkLocalizacao").value = servico.endereco.linkLocalizacao;
+            }
+
+            document.getElementById("tituloAgenda").textContent = "Editar Serviço";
+            document.getElementById("botaoAcao").textContent = "Salvar Alterações";
+            document.getElementById("botaoAcao").onclick = adicionarServico;
+            editIndex = index;
+
+            mostrarAba("agenda");
+        }
+
+        function aplicarFiltros() {
+            let filtros = {
+                tecnico: document.getElementById("filtroTecnico").value,
+                data: document.getElementById("filtroData").value,
+                tipoServico: document.getElementById("filtroTipoServico").value,
+                status: document.getElementById("filtroStatus").value,
+                cliente: document.getElementById("filtroCliente").value
+            };
+            atualizarListaServicos(filtros);
+        }
+
+        function limparFiltros() {
+            document.getElementById("filtroTecnico").value = "";
+            document.getElementById("filtroData").value = "";
+            document.getElementById("filtroTipoServico").value = "";
+            document.getElementById("filtroStatus").value = "";
+            document.getElementById("filtroCliente").value = "";
+            atualizarListaServicos();
+        }
+
+        function removerServico(index) {
+            if (confirm("Tem certeza que deseja remover este serviço?")) {
+                let servicos = JSON.parse(localStorage.getItem("servicos") || "[]");
+                servicos.splice(index, 1);
+                localStorage.setItem("servicos", JSON.stringify(servicos));
+                aplicarFiltros();
+            }
+        }
+
+        window.onload = function () {
+            document.getElementById("campoEndereco").style.display = "none";
+            document.getElementById("campoCondominio").style.display = "none";
+            document.getElementById("campoLink").style.display = "none";
+            atualizarListaServicos();
+        };
     </script>
-
 </body>
 </html>
