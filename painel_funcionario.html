@@ -3,56 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel do Funcionário</title>
+    <title>Painel do Funcionário - Versão Móvel</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
             text-align: center;
         }
         .container {
-            width: 80%;
-            margin: auto;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
             background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px #ccc;
+            padding: 10px;
+            border-radius: 0;
+            box-shadow: none;
         }
         .tabs {
             display: flex;
-            justify-content: space-between;
+            justify-content: space-around;
             background: #FF7700;
-            padding: 10px;
-            border-radius: 5px;
+            padding: 5px;
+            border-radius: 0;
         }
         .tab {
             flex: 1;
-            padding: 10px;
+            padding: 8px;
             cursor: pointer;
             color: white;
             font-weight: bold;
+            font-size: 14px;
         }
         .tab.active {
             background: #E65C00;
         }
+        .aba {
+            display: none;
+            padding: 10px;
+        }
         .form-group {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
             margin-bottom: 10px;
             width: 100%;
         }
         .form-group label {
-            width: 150px;
-            text-align: right;
+            width: 100%;
+            text-align: left;
             font-weight: bold;
-            margin-right: 10px;
+            margin-bottom: 5px;
+            font-size: 14px;
         }
         .form-group input, .form-group select {
-            flex: 1;
+            width: 100%;
             padding: 8px;
             border: 1px solid #ccc;
             border-radius: 5px;
+            font-size: 14px;
+            box-sizing: border-box;
         }
         .full-width {
             width: 100%;
@@ -66,6 +76,7 @@
             cursor: pointer;
             border-radius: 5px;
             font-size: 16px;
+            margin-top: 10px;
         }
         .button:hover {
             background: #E65C00;
@@ -75,11 +86,19 @@
             padding: 8px;
             border-radius: 5px;
             width: 100%;
+            box-sizing: border-box;
         }
         #campoLink {
             display: flex;
-            justify-content: space-between;
+            align-items: center;
             width: 100%;
+        }
+        #linkLocalizacao {
+            flex: 3;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 12px;
         }
         .servico-item {
             border: 1px solid #ccc;
@@ -95,30 +114,32 @@
             background: #fff5e6;
         }
         .tecnico-section {
-            margin: 20px 0;
+            margin: 10px 0;
         }
         .tecnico-section h3 {
             background: #FF7700;
             color: white;
-            padding: 10px;
+            padding: 8px;
             border-radius: 5px;
             margin-bottom: 10px;
+            font-size: 16px;
         }
         .filtro-group {
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            gap: 10px;
+            flex-direction: column;
+            margin-bottom: 10px;
+            gap: 5px;
         }
         .filtro-group select, .filtro-group input {
             padding: 8px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            width: 23%;
+            width: 100%;
+            font-size: 14px;
         }
         .filtro-buttons {
             display: flex;
-            gap: 10px;
+            gap: 5px;
         }
         .remove-button, .edit-button {
             background: #E65C00;
@@ -127,27 +148,66 @@
             padding: 5px 10px;
             border-radius: 5px;
             cursor: pointer;
-            margin-left: 10px;
+            font-size: 12px;
         }
         .remove-button:hover, .edit-button:hover {
             background: #FF7700;
         }
         .servico-item .buttons {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 5px;
+            right: 5px;
+        }
+        .localizacao {
+            color: #0066cc;
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        @media (min-width: 600px) {
+            .container {
+                width: 80%;
+                max-width: 800px;
+            }
+            .form-group {
+                flex-direction: row;
+                align-items: center;
+            }
+            .form-group label {
+                width: 150px;
+                text-align: right;
+                margin-right: 10px;
+            }
+            .filtro-group {
+                flex-direction: row;
+            }
+            .filtro-group select, .filtro-group input {
+                width: 23%;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="tabs">
-            <div class="tab active" onclick="mostrarAba('agenda')">Agenda de Serviços</div>
+            <div class="tab active" onclick="mostrarAba('agenda')">Adicionar Serviço</div>
+            <div class="tab" onclick="mostrarAba('ativos')">Serviços Ativos</div>
             <div class="tab" onclick="mostrarAba('realizados')">Agendamentos Realizados</div>
         </div>
 
         <div id="agenda" class="aba">
             <h2 id="tituloAgenda">Adicionar Novo Serviço</h2>
+
+            <div class="form-group">
+                <label>Filtro de Veículo:</label>
+                <input type="text" id="filtroVeiculo" placeholder="Digite nome, placa ou cliente" oninput="filtrarVeiculos()">
+            </div>
+            <div class="form-group">
+                <label>Veículo (API):</label>
+                <select id="veiculoAPI" onchange="preencherDadosVeiculo()">
+                    <option value="">Selecione um veículo</option>
+                </select>
+            </div>
 
             <div class="form-group">
                 <label>Tipo de Serviço:</label>
@@ -161,12 +221,12 @@
                     <option value="Passar o Cartão">Passar o Cartão</option>
                 </select>
                 <label>Empresa:</label>
-                <select id="empresa">
+                <select id="empresa" onchange="carregarVeiculosPorBase()">
                     <option value="">Selecione</option>
-                    <option value="JC Horizonte">JC Horizonte</option>
-                    <option value="JC Fortaleza">JC Fortaleza</option>
-                    <option value="Defend">Defend</option>
-                    <option value="Rastremax">Rastremax</option>
+                    <option value="https://jc.rastrosystem.com.br">JC Horizonte</option>
+                    <option value="https://jccarfortaleza.rastrosystem.com.br">JC Fortaleza</option>
+                    <option value="https://rastremax.rastrosystem.com.br">Rastremax</option>
+                    <option value="https://jc.sistemsatservicos.com.br">Defend</option>
                 </select>
             </div>
 
@@ -251,7 +311,8 @@
 
             <div class="form-group" id="campoLink" style="display: none; align-items: center;">
                 <label for="linkLocalizacao" style="flex: 0 0 200px; text-align: right;">Localização via Link:</label>
-                <input type="url" id="linkLocalizacao" class="full-width" placeholder="Cole aqui o link da localização" onblur="validarLink()">
+                <input type="url" id="linkLocalizacao" class="full-width" placeholder="Localização do veículo" readonly>
+                <button class="button" onclick="abrirGoogleMaps()">Abrir no Google Maps</button>
             </div>
 
             <div class="form-group">
@@ -274,6 +335,12 @@
             </div>
 
             <button class="button" id="botaoAcao" onclick="adicionarServico()">Adicionar Serviço</button>
+        </div>
+
+        <div id="ativos" class="aba" style="display: none;">
+            <h2>Serviços Ativos</h2>
+            <div id="listaServicosAtivos"></div>
+            <button class="button" onclick="atualizarServicosAtivos()">Atualizar Serviços</button>
         </div>
 
         <div id="realizados" class="aba" style="display: none;">
@@ -315,7 +382,148 @@
 
     <script>
         let editIndex = null;
-        const dataAtual = "2025-03-11"; // Data fixa conforme o contexto (11 de março de 2025)
+        const dataAtual = "2025-03-12"; // Atualizado para hoje
+        let todosVeiculos = [];
+        let intervalId = null; // Para controle do intervalo de atualização
+
+        // Tokens para cada base
+        const tokensPorBase = {
+            "https://jc.rastrosystem.com.br": "265f94ae4347d0dca9bdd936e6be93536540cf88",
+            "https://rastremax.rastrosystem.com.br": "532285f1415c760f0bca96b2a1673618091dcff0",
+            "https://jccarfortaleza.rastrosystem.com.br": "fd329f6923befecf8b12f5258d0da457e1a7fad9",
+            "https://jc.sistemsatservicos.com.br": "87b97b1f1080839159279ff34154603d78918f5a"
+        };
+
+        // Função para normalizar o nome
+        function normalizarNome(nome) {
+            if (!nome) return "";
+            return nome
+                .toLowerCase()
+                .split(' ')
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' ');
+        }
+
+        // Função para obter a localização do veículo
+        function obterLocalizacao(veiculo) {
+            if (!veiculo.eqp_id || !veiculo.gps_fixed) {
+                return "Localização indisponível (equipamento não ativo ou GPS não fixado)";
+            }
+
+            if (veiculo.latitude && veiculo.longitude) {
+                return `https://www.google.com/maps?q=${veiculo.latitude},${veiculo.longitude}`;
+            } else if (veiculo.address) {
+                return `https://www.google.com/maps?q=${encodeURIComponent(veiculo.address)}`;
+            } else {
+                return "Localização indisponível (sem coordenadas ou endereço)";
+            }
+        }
+
+        // Função para abrir o link no Google Maps
+        function abrirGoogleMaps() {
+            const link = document.getElementById("linkLocalizacao").value;
+            if (link && link.startsWith("http")) {
+                window.open(link, "_blank");
+            } else {
+                alert("Nenhum link de localização válido disponível.");
+            }
+        }
+
+        // Função para carregar os veículos de uma base específica
+        async function carregarVeiculosPorBase() {
+            const baseUrl = document.getElementById("empresa").value;
+            if (!baseUrl) {
+                todosVeiculos = [];
+                preencherDropdownVeiculos([]);
+                document.getElementById("campoLink").style.display = "none";
+                return;
+            }
+
+            const token = tokensPorBase[baseUrl];
+            if (!token) {
+                alert("Token não configurado para esta base.");
+                return;
+            }
+
+            try {
+                const response = await fetch(`${baseUrl}/api_v2/veiculos-v3/`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `token ${token}`
+                    }
+                });
+                if (!response.ok) {
+                    console.error("Erro na requisição:", response.status, response.statusText);
+                    alert("Erro ao carregar veículos da base selecionada. Verifique o console.");
+                    return;
+                }
+                const data = await response.json();
+                console.log("Resposta da API para", baseUrl, ":", JSON.stringify(data, null, 2));
+
+                todosVeiculos = data.dispositivos || [];
+                if (!todosVeiculos || todosVeiculos.length === 0) {
+                    console.error("Nenhum veículo encontrado em 'dispositivos' para", baseUrl);
+                    alert("Nenhum veículo encontrado nesta base.");
+                    preencherDropdownVeiculos([]);
+                    document.getElementById("campoLink").style.display = "none";
+                    return;
+                }
+
+                preencherDropdownVeiculos(todosVeiculos);
+            } catch (error) {
+                console.error("Erro ao carregar veículos:", error);
+                alert("Erro ao conectar com a API da base selecionada.");
+            }
+        }
+
+        // Função para preencher o dropdown com os veículos
+        function preencherDropdownVeiculos(veiculos) {
+            const selectVeiculo = document.getElementById("veiculoAPI");
+            selectVeiculo.innerHTML = '<option value="">Selecione um veículo</option>';
+
+            veiculos.forEach(veiculo => {
+                const option = document.createElement("option");
+                option.value = veiculo.eqp_id || veiculo.id || "";
+                option.text = `${veiculo.name || veiculo.veiculo_modelo || "Veículo sem nome"} (${veiculo.placa || "Sem placa"}) - ${veiculo.cliente || "Sem cliente"}`;
+                option.dataset.dados = JSON.stringify(veiculo);
+                selectVeiculo.appendChild(option);
+            });
+        }
+
+        // Função para filtrar os veículos com base no texto digitado
+        function filtrarVeiculos() {
+            const filtro = document.getElementById("filtroVeiculo").value.toLowerCase();
+            const veiculosFiltrados = todosVeiculos.filter(veiculo => {
+                const nome = (veiculo.name || veiculo.veiculo_modelo || "").toLowerCase();
+                const placa = (veiculo.placa || "").toLowerCase();
+                const cliente = (veiculo.cliente || "").toLowerCase();
+                return nome.includes(filtro) || placa.includes(filtro) || cliente.includes(filtro);
+            });
+            preencherDropdownVeiculos(veiculosFiltrados);
+        }
+
+        // Função para preencher os campos com dados do veículo selecionado
+        function preencherDadosVeiculo() {
+            const selectVeiculo = document.getElementById("veiculoAPI");
+            const selectedOption = selectVeiculo.options[selectVeiculo.selectedIndex];
+            if (!selectedOption.value) return;
+
+            const veiculo = JSON.parse(selectedOption.dataset.dados);
+
+            // Normaliza o nome do cliente
+            const nomeNormalizado = normalizarNome(veiculo.cliente || "");
+            document.getElementById("cliente").value = nomeNormalizado;
+            document.getElementById("modelo").value = veiculo.veiculo_modelo || veiculo.name || "";
+            document.getElementById("ano").value = "";
+            document.getElementById("placa").value = veiculo.placa || "";
+            document.getElementById("tipoEndereco").value = "link";
+            document.getElementById("campoLink").style.display = "flex";
+            document.getElementById("campoEndereco").style.display = "none";
+
+            // Obtém a localização do veículo
+            const localizacao = obterLocalizacao(veiculo);
+            document.getElementById("linkLocalizacao").value = localizacao;
+        }
 
         function adicionarServico() {
             let tipoServico = document.getElementById("tipoServico").value;
@@ -332,6 +540,7 @@
             let placa = document.getElementById("placa").value;
             let observacoes = document.getElementById("observacoes").value;
             let valorReceber = document.getElementById("valorReceber").value;
+            let eqp_id = document.getElementById("veiculoAPI").value || null;
 
             let rua = document.getElementById("rua")?.value.trim() || "";
             let numero = document.getElementById("numero")?.value.trim() || "";
@@ -340,9 +549,9 @@
             let ehCondominio = document.getElementById("ehCondominio")?.value || "";
             let bloco = document.getElementById("bloco")?.value.trim() || "";
             let apartamento = document.getElementById("apartamento")?.value.trim() || "";
-            let linkLocalizacao = document.getElementById("linkLocalizacao")?.value.trim() || "";
+            let linkLocalizacao = document.getElementById("linkLocalizacao").value.trim() || "";
 
-            let nomeValido = /^[A-ZÀ-Ú][a-zà-ú]+\s[A-ZÀ-Ú][a-zà-ú]+$/;
+            let nomeValido = /^[A-Za-zÀ-Ú][A-Za-zÀ-Ú\s]*(?:\s[A-Za-zÀ-Ú][A-Za-zÀ-Ú\s]*)+$/;
 
             if (!tipoServico || !empresa || !data || !horario || !tecnico || !cliente || !telefone || !modelo || !ano || !observacoes || !valorReceber) {
                 alert("Preencha todos os campos obrigatórios!");
@@ -364,9 +573,8 @@
                     return;
                 }
             } else if (tipoEndereco === "link") {
-                let regexLink = /^(https?:\/\/)?(www\.)?(google\.com\/maps|goo\.gl\/maps|waze\.com)\/.+$/;
-                if (!regexLink.test(linkLocalizacao)) {
-                    alert("Por favor, insira um link válido de localização do Google Maps ou Waze.");
+                if (!linkLocalizacao || linkLocalizacao === "Localização indisponível (equipamento não ativo ou GPS não fixado)") {
+                    alert("Por favor, insira uma localização válida ou use o endereço digitado.");
                     return;
                 }
             } else {
@@ -383,7 +591,8 @@
             let servico = {
                 tipoServico, empresa, data, horario, tecnico, status, cliente, telefone,
                 tipoEndereco, modelo, ano, placa, observacoes, valorReceber,
-                endereco: tipoEndereco === "digitado" ? { rua, numero, bairro, cidade, ehCondominio, bloco, apartamento } : { linkLocalizacao }
+                endereco: tipoEndereco === "digitado" ? { rua, numero, bairro, cidade, ehCondominio, bloco, apartamento } : { linkLocalizacao },
+                eqp_id
             };
 
             if (editIndex !== null) {
@@ -399,11 +608,14 @@
             localStorage.setItem("servicos", JSON.stringify(servicos));
             limparFormulario();
             atualizarListaServicos();
-            mostrarAba("realizados");
+            atualizarServicosAtivos(); // Atualiza a lista de serviços ativos
+            mostrarAba("ativos");
             alert(editIndex === null ? "Serviço adicionado com sucesso!" : "Serviço atualizado com sucesso!");
         }
 
         function limparFormulario() {
+            document.getElementById("filtroVeiculo").value = "";
+            document.getElementById("veiculoAPI").value = "";
             document.getElementById("tipoServico").value = "";
             document.getElementById("empresa").value = "";
             document.getElementById("data").value = "";
@@ -429,6 +641,7 @@
             document.getElementById("campoEndereco").style.display = "none";
             document.getElementById("campoLink").style.display = "none";
             document.getElementById("campoCondominio").style.display = "none";
+            preencherDropdownVeiculos([]);
         }
 
         function formatarTelefone(campo) {
@@ -464,7 +677,7 @@
             } else if (tipoEndereco === "link") {
                 campoEndereco.style.display = "none";
                 campoCondominio.style.display = "none";
-                campoLink.style.display = "block";
+                campoLink.style.display = "flex";
             } else {
                 campoEndereco.style.display = "none";
                 campoLink.style.display = "none";
@@ -477,7 +690,7 @@
             let link = campoLink.value.trim();
             let regexLink = /^(https?:\/\/)?(www\.)?(google\.com\/maps|goo\.gl\/maps|waze\.com|maps\.apple\.com)\/.+$/;
 
-            if (link && !regexLink.test(link)) {
+            if (link && !regexLink.test(link) && link !== "Localização indisponível (equipamento não ativo ou GPS não fixado)") {
                 alert("Por favor, insira um link válido do Google Maps, Waze ou Apple Maps.");
                 campoLink.value = "";
                 campoLink.focus();
@@ -487,17 +700,18 @@
         function mostrarAba(aba) {
             let abas = document.querySelectorAll(".tab");
             abas.forEach(tab => tab.classList.remove("active"));
-            document.querySelector([onclick="mostrarAba('${aba}')"]).classList.add("active");
+            document.querySelector(`[onclick="mostrarAba('${aba}')"]`).classList.add("active");
 
             document.querySelectorAll(".aba").forEach(div => div.style.display = "none");
             document.getElementById(aba).style.display = "block";
 
+            if (aba === "ativos") atualizarServicosAtivos();
             if (aba === "realizados") aplicarFiltros();
         }
 
         function formatarData(data) {
             let [ano, mes, dia] = data.split("-");
-            return ${dia}/${mes}/${ano};
+            return `${dia}/${mes}/${ano}`;
         }
 
         function atualizarListaServicos(filtros = {}) {
@@ -528,11 +742,11 @@
                 if (servicosTecnico.length > 0) {
                     let section = document.createElement("div");
                     section.className = "tecnico-section";
-                    section.innerHTML = <h3>${tecnico} (${servicosTecnico.length} serviços)</h3>;
+                    section.innerHTML = `<h3>${tecnico} (${servicosTecnico.length} serviços)</h3>`;
 
                     servicosTecnico.forEach((servico, index) => {
                         let div = document.createElement("div");
-                        div.className = servico-item ${servico.data === dataAtual ? 'hoje' : ''};
+                        div.className = `servico-item ${servico.data === dataAtual ? 'hoje' : ''}`;
                         div.innerHTML = `
                             <strong>Serviço #${index + 1}</strong><br>
                             Tipo: ${servico.tipoServico}<br>
@@ -541,8 +755,8 @@
                             Status: ${servico.status}<br>
                             Cliente: ${servico.cliente} - ${servico.telefone}<br>
                             Endereço: ${servico.tipoEndereco === "digitado" 
-                                ? ${servico.endereco.rua}, ${servico.endereco.numero}, ${servico.endereco.bairro}, ${servico.endereco.cidade} 
-                                : <a href="${servico.endereco.linkLocalizacao}" target="_blank">Ver localização</a>}<br>
+                                ? `${servico.endereco.rua}, ${servico.endereco.numero}, ${servico.endereco.bairro}, ${servico.endereco.cidade}` 
+                                : `<a href="${servico.endereco.linkLocalizacao}" target="_blank" class="localizacao">${servico.endereco.linkLocalizacao}</a>`}<br>
                             Veículo: ${servico.modelo} (${servico.ano}) ${servico.placa ? "- " + servico.placa : ""}<br>
                             Observações: ${servico.observacoes}<br>
                             Valor: R$ ${servico.valorReceber}
@@ -559,48 +773,48 @@
             });
         }
 
-        function editarServico(index) {
+        function atualizarServicosAtivos() {
+            let listaServicosAtivos = document.getElementById("listaServicosAtivos");
             let servicos = JSON.parse(localStorage.getItem("servicos") || "[]");
-            let servico = servicos[index];
+            let servicosAtivos = servicos.filter(servico => servico.status === "Pendente" || servico.status === "Concluído");
 
-            document.getElementById("tipoServico").value = servico.tipoServico;
-            document.getElementById("empresa").value = servico.empresa;
-            document.getElementById("data").value = servico.data;
-            document.getElementById("horario").value = servico.horario;
-            document.getElementById("tecnico").value = servico.tecnico;
-            document.getElementById("status").value = servico.status;
-            document.getElementById("cliente").value = servico.cliente;
-            document.getElementById("telefone").value = servico.telefone;
-            document.getElementById("tipoEndereco").value = servico.tipoEndereco;
-            document.getElementById("modelo").value = servico.modelo;
-            document.getElementById("ano").value = servico.ano;
-            document.getElementById("placa").value = servico.placa;
-            document.getElementById("observacoes").value = servico.observacoes;
-            document.getElementById("valorReceber").value = servico.valorReceber;
+            listaServicosAtivos.innerHTML = "";
 
-            if (servico.tipoEndereco === "digitado") {
-                document.getElementById("campoEndereco").style.display = "block";
-                document.getElementById("rua").value = servico.endereco.rua;
-                document.getElementById("numero").value = servico.endereco.numero;
-                document.getElementById("bairro").value = servico.endereco.bairro;
-                document.getElementById("cidade").value = servico.endereco.cidade;
-                document.getElementById("ehCondominio").value = servico.endereco.ehCondominio;
-                if (servico.endereco.ehCondominio === "sim") {
-                    document.getElementById("campoCondominio").style.display = "flex";
-                    document.getElementById("bloco").value = servico.endereco.bloco;
-                    document.getElementById("apartamento").value = servico.endereco.apartamento;
-                }
-            } else if (servico.tipoEndereco === "link") {
-                document.getElementById("campoLink").style.display = "block";
-                document.getElementById("linkLocalizacao").value = servico.endereco.linkLocalizacao;
-            }
+            servicosAtivos.forEach((servico, index) => {
+                let div = document.createElement("div");
+                div.className = `servico-item ${servico.data === dataAtual ? 'hoje' : ''}`;
+                div.innerHTML = `
+                    <strong>Serviço #${index + 1}</strong><br>
+                    Tipo: ${servico.tipoServico}<br>
+                    Empresa: ${servico.empresa}<br>
+                    Data: ${formatarData(servico.data)} às ${servico.horario}<br>
+                    Status: ${servico.status}<br>
+                    Cliente: ${servico.cliente} - ${servico.telefone}<br>
+                    Endereço: ${servico.tipoEndereco === "digitado" 
+                        ? `${servico.endereco.rua}, ${servico.endereco.numero}, ${servico.endereco.bairro}, ${servico.endereco.cidade}` 
+                        : `<a href="${servico.endereco.linkLocalizacao}" target="_blank" class="localizacao">${servico.endereco.linkLocalizacao}</a>`}<br>
+                    Veículo: ${servico.modelo} (${servico.ano}) ${servico.placa ? "- " + servico.placa : ""}<br>
+                    Observações: ${servico.observacoes}<br>
+                    Valor: R$ ${servico.valorReceber}
+                    <div class="buttons">
+                        <select onchange="atualizarStatus(${servicos.indexOf(servico)}, this.value)">
+                            <option value="Pendente" ${servico.status === "Pendente" ? "selected" : ""}>Pendente</option>
+                            <option value="Concluído" ${servico.status === "Concluído" ? "selected" : ""}>Concluído</option>
+                            <option value="Cancelado" ${servico.status === "Cancelado" ? "selected" : ""}>Cancelado</option>
+                        </select>
+                    </div>
+                `;
+                listaServicosAtivos.appendChild(div);
+            });
+        }
 
-            document.getElementById("tituloAgenda").textContent = "Editar Serviço";
-            document.getElementById("botaoAcao").textContent = "Salvar Alterações";
-            document.getElementById("botaoAcao").onclick = adicionarServico;
-            editIndex = index;
-
-            mostrarAba("agenda");
+        function atualizarStatus(index, novoStatus) {
+            let servicos = JSON.parse(localStorage.getItem("servicos") || "[]");
+            servicos[index].status = novoStatus;
+            localStorage.setItem("servicos", JSON.stringify(servicos));
+            atualizarServicosAtivos();
+            atualizarListaServicos();
+            alert("Status atualizado para: " + novoStatus);
         }
 
         function aplicarFiltros() {
@@ -629,6 +843,73 @@
                 servicos.splice(index, 1);
                 localStorage.setItem("servicos", JSON.stringify(servicos));
                 aplicarFiltros();
+                atualizarServicosAtivos();
+            }
+        }
+
+        function editarServico(index) {
+            let servicos = JSON.parse(localStorage.getItem("servicos") || "[]");
+            let servico = servicos[index];
+
+            document.getElementById("filtroVeiculo").value = "";
+            document.getElementById("veiculoAPI").value = servico.eqp_id || "";
+            document.getElementById("tipoServico").value = servico.tipoServico;
+            document.getElementById("empresa").value = servico.empresa;
+            document.getElementById("data").value = servico.data;
+            document.getElementById("horario").value = servico.horario;
+            document.getElementById("tecnico").value = servico.tecnico;
+            document.getElementById("status").value = servico.status;
+            document.getElementById("cliente").value = servico.cliente;
+            document.getElementById("telefone").value = servico.telefone;
+            document.getElementById("tipoEndereco").value = servico.tipoEndereco;
+            document.getElementById("modelo").value = servico.modelo;
+            document.getElementById("ano").value = servico.ano;
+            document.getElementById("placa").value = servico.placa;
+            document.getElementById("observacoes").value = servico.observacoes;
+            document.getElementById("valorReceber").value = servico.valorReceber;
+
+            if (servico.tipoEndereco === "digitado") {
+                document.getElementById("campoEndereco").style.display = "block";
+                document.getElementById("rua").value = servico.endereco.rua;
+                document.getElementById("numero").value = servico.endereco.numero;
+                document.getElementById("bairro").value = servico.endereco.bairro;
+                document.getElementById("cidade").value = servico.endereco.cidade;
+                document.getElementById("ehCondominio").value = servico.endereco.ehCondominio;
+                if (servico.endereco.ehCondominio === "sim") {
+                    document.getElementById("campoCondominio").style.display = "flex";
+                    document.getElementById("bloco").value = servico.endereco.bloco;
+                    document.getElementById("apartamento").value = servico.endereco.apartamento;
+                }
+            } else if (servico.tipoEndereco === "link") {
+                document.getElementById("campoLink").style.display = "flex";
+                document.getElementById("linkLocalizacao").value = servico.endereco.linkLocalizacao;
+            }
+
+            document.getElementById("tituloAgenda").textContent = "Editar Serviço";
+            document.getElementById("botaoAcao").textContent = "Salvar Alterações";
+            document.getElementById("botaoAcao").onclick = adicionarServico;
+            editIndex = index;
+
+            carregarVeiculosPorBase();
+            mostrarAba("agenda");
+        }
+
+        // Função para iniciar a atualização automática dos serviços ativos
+        function iniciarAtualizacaoAutomatica() {
+            if (!intervalId) {
+                intervalId = setInterval(() => {
+                    if (document.getElementById("ativos").style.display !== "none") {
+                        atualizarServicosAtivos();
+                    }
+                }, 30000); // Atualiza a cada 30 segundos
+            }
+        }
+
+        // Função para parar a atualização automática
+        function pararAtualizacaoAutomatica() {
+            if (intervalId) {
+                clearInterval(intervalId);
+                intervalId = null;
             }
         }
 
@@ -637,6 +918,10 @@
             document.getElementById("campoCondominio").style.display = "none";
             document.getElementById("campoLink").style.display = "none";
             atualizarListaServicos();
+            iniciarAtualizacaoAutomatica(); // Inicia a atualização automática ao carregar
+
+            // Adiciona evento para parar a atualização ao fechar a aba
+            window.addEventListener("beforeunload", pararAtualizacaoAutomatica);
         };
     </script>
 </body>
