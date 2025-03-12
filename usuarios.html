@@ -70,9 +70,10 @@
             <input type="text" id="username" placeholder="Usuário" required>
             <input type="password" id="password" placeholder="Senha" required>
             <select id="tipo">
-                <option value="admin">Administrador</option>
-                <option value="tecnico">Técnico</option>
-            </select>
+    <option value="admin">Administrador</option>
+    <option value="tecnico">Técnico</option>
+    <option value="operador">Operador</option> <!-- Nova opção adicionada -->
+</select>
             <button type="submit">Adicionar Usuário</button>
         </form>
 
@@ -107,23 +108,31 @@
         });
 
         function atualizarTabela() {
-            const tbody = document.querySelector("tbody");
-            tbody.innerHTML = "";
+    const tbody = document.querySelector("tbody");
+    tbody.innerHTML = ""; // Limpa a tabela antes de adicionar os usuários novamente
 
-            let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+    let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
 
-            usuarios.forEach((usuario, index) => {
-                let row = tbody.insertRow();
-                row.innerHTML = `
-                    <td>${usuario.username}</td>
-                    <td>${usuario.tipo}</td>
-                    <td>
-                        <button class="action-btn edit-btn" onclick="editarUsuario(${index})">Editar</button>
-                        <button class="action-btn delete-btn" onclick="removerUsuario(${index})">Excluir</button>
-                    </td>
-                `;
-            });
-        }
+    if (usuarios.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="3">Nenhum usuário cadastrado</td></tr>`;
+        return;
+    }
+
+    usuarios.forEach((usuario, index) => {
+        let row = tbody.insertRow();
+        row.innerHTML = `
+            <td>${usuario.username}</td>
+            <td>${usuario.tipo}</td>
+            <td>
+                <button class="action-btn edit-btn" onclick="editarUsuario(${index})">Editar</button>
+                <button class="action-btn delete-btn" onclick="removerUsuario(${index})">Excluir</button>
+            </td>
+        `;
+    });
+}
+
+// Carregar a tabela ao abrir a página
+document.addEventListener("DOMContentLoaded", atualizarTabela);
 
         function editarUsuario(index) {
             let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
