@@ -6,6 +6,20 @@
     <title>Dashboard de Atendimentos</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.2.1/chart.umd.min.js"></script>
     <style>
+.btn-voltar {
+    background: #ff8c00;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 10px 20px;
+    border: none;
+    margin-bottom: 20px;
+}
+
+.btn-voltar:hover {
+    background: #cc7000;
+}
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
@@ -65,6 +79,7 @@
 
     <div class="container">
         <h1>Dashboard de Atendimentos</h1>
+<button onclick="window.location.href='painel.html'" class="btn-voltar">Voltar para o Painel</button>
         <div class="chart-container"><canvas id="graficoAtendimentosPorTecnico"></canvas></div>
         <div class="chart-container"><canvas id="graficoStatusAtendimentos"></canvas></div>
         <div class="chart-container"><canvas id="graficoAtendimentosPorMes"></canvas></div>
