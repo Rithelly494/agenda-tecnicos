@@ -3,41 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel de Controle</title>
+    <title>Painel do Administrador</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #ff8c00;
+            background-color: #f4f4f4;
             text-align: center;
             padding: 20px;
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 0 auto;
             background: white;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
         }
 
-        h1 {
-            color: #ff8c00;
-        }
-
-        .form-container {
-            margin-top: 20px;
+        .card {
+            background: white;
             padding: 20px;
-            background: #f4f4f4;
             border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
         }
 
-        input, select, button {
-            width: 100%;
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 5px;
-            border: 1px solid #ccc;
+        .card h2 {
+            color: #ff8c00;
         }
 
         button {
@@ -46,114 +44,55 @@
             font-size: 16px;
             cursor: pointer;
             border-radius: 5px;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            margin-top: 10px;
         }
 
         button:hover {
             background: #cc7000;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #ff8c00;
-            color: white;
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .card {
+                width: 90%;
+            }
         }
     </style>
 </head>
 <body>
-
+    <h1>Painel do Administrador</h1>
     <div class="container">
-        <h1>Painel de Controle</h1>
-
-        <div id="user-management" class="form-container">
-            <h2>Gerenciar Usuários</h2>
-            <form id="formUsuario">
-                <input type="text" id="username" placeholder="Usuário" required>
-                <input type="password" id="password" placeholder="Senha" required>
-                <select id="tipo">
-                    <option value="admin">Administrador</option>
-                    <option value="tecnico">Técnico</option>
-                    <option value="funcionario">Funcionário</option>
-                </select>
-                <button type="submit">Adicionar Usuário</button>
-            </form>
-
-            <h2>Usuários Cadastrados</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Usuário</th>
-                        <th>Tipo</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody id="usuariosTabela"></tbody>
-            </table>
+        <div class="card">
+            <h2>Usuários</h2>
+            <p>Gerencie os usuários do sistema.</p>
+            <button onclick="window.location.href='usuarios.html'">Gerenciar Usuários</button>
         </div>
-
-        <button onclick="logout()">Sair</button>
+        <div class="card">
+            <h2>Dashboard</h2>
+            <p>Veja o resumo dos serviços.</p>
+            <button onclick="window.location.href='dashboard.html'">Acessar Dashboard</button>
+        </div>
+        <div class="card">
+            <h2>Serviços</h2>
+            <p>Gerencie todos os serviços cadastrados.</p>
+            <button onclick="window.location.href='painel_funcionario.html'">Painel de Funcionários</button>
+            <button onclick="window.location.href='painel_tecnico.html'">Painel de Técnicos</button>
+        </div>
     </div>
 
+    <button onclick="logout()" style="width: 200px; margin-top: 20px;">Sair</button>
+
     <script>
-        let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
-        if (!usuarios.some(u => u.username === "admin")) {
-            usuarios.push({ username: "admin", password: "102030", tipo: "admin" });
-            localStorage.setItem("usuarios", JSON.stringify(usuarios));
-        }
-
-        document.getElementById("formUsuario").addEventListener("submit", function(event) {
-            event.preventDefault();
-            const usuario = {
-                username: document.getElementById("username").value,
-                password: document.getElementById("password").value,
-                tipo: document.getElementById("tipo").value
-            };
-            usuarios.push(usuario);
-            localStorage.setItem("usuarios", JSON.stringify(usuarios));
-            atualizarTabela();
-            document.getElementById("formUsuario").reset();
-        });
-
-        function atualizarTabela() {
-            const tbody = document.getElementById("usuariosTabela");
-            tbody.innerHTML = "";
-            usuarios.forEach((usuario, index) => {
-                let row = tbody.insertRow();
-                row.innerHTML = `
-                    <td>${usuario.username}</td>
-                    <td>${usuario.tipo}</td>
-                    <td>
-                        <button onclick="removerUsuario(${index})">Excluir</button>
-                    </td>
-                `;
-            });
-        }
-
-        function removerUsuario(index) {
-            usuarios.splice(index, 1);
-            localStorage.setItem("usuarios", JSON.stringify(usuarios));
-            atualizarTabela();
-        }
-
         function logout() {
+            localStorage.removeItem("usuarioLogado");
             window.location.href = "login.html";
         }
-
-        window.onload = function() {
-            atualizarTabela();
-        };
     </script>
-
 </body>
 </html>
-
