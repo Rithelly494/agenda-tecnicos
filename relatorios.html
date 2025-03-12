@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Relatórios de Atendimentos</title>
+    <title>Dashboard de Atendimentos</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
@@ -20,67 +20,140 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         h1 {
             color: #ff8c00;
         }
 
+        .chart-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px 0;
+        }
+
         canvas {
+            width: 100% !important;
+            height: auto !important;
+        }
+
+        .ranking {
+            width: 100%;
+            max-width: 600px;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             margin-top: 20px;
+            text-align: left;
+        }
+
+        .ranking h2 {
+            color: #ff8c00;
+            text-align: center;
+        }
+
+        .ranking ol {
+            padding-left: 20px;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>Relatórios de Atendimentos</h1>
-        <canvas id="graficoAtendimentos"></canvas>
+        <h1>Dashboard de Atendimentos</h1>
+        <div class="chart-container"><canvas id="graficoAtendimentosPorTecnico"></canvas></div>
+        <div class="chart-container"><canvas id="graficoStatusAtendimentos"></canvas></div>
+        <div class="chart-container"><canvas id="graficoAtendimentosPorMes"></canvas></div>
+        <div class="chart-container"><canvas id="graficoTiposDeServico"></canvas></div>
+    </div>
+
+    <div class="ranking">
+        <h2>Ranking Geral de Serviços</h2>
+        <ol id="rankingGeral"></ol>
+    </div>
+
+    <div class="ranking">
+        <h2>Ranking por Tipo de Serviço</h2>
+        <ol id="rankingPorTipo"></ol>
     </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            // Objeto para contar atendimentos por técnico
-            const atendimentos = {};
+            const atendimentos = JSON.parse(localStorage.getItem("servicos")) || [];
 
-            // Simulando a leitura dos atendimentos armazenados no localStorage
-            for (let i = 1; i <= localStorage.length; i++) {
-                const status = localStorage.getItem(i);
-                if (status === "Realizado") {
-                    const tecnico = localStorage.getItem(`tecnico_${i}`);
-                    if (tecnico) {
-                        atendimentos[tecnico] = (atendimentos[tecnico] || 0) + 1;
-                    }
-                }
+            // Estrutura para armazenar os dados
+            const atendimentosPorTecnico = {};
+            const statusAtendimentos = { Pendente: 0, Concluído: 0, Cancelado: 0 };
+            const atendimentosPorMes = {};
+            const tiposDeServico = {};
+            const rankingTecnicos = {};
+
+            atendimentos.forEach(servico => {
+                // Técnico
+                atendimentosPorTecnico[servico.tecnico] = (atendimentosPorTecnico[servico.tecnico] || 0) + 1;
+                rankingTecnicos[servico.tecnico] = (rankingTecnicos[servico.tecnico] || 0) + 1;
+
+                // Status
+                statusAtendimentos[servico.status] = (statusAtendimentos[servico.status] || 0) + 1;
+
+                // Atendimentos por Mês
+                const mes = servico.data ? servico.data.substring(0, 7) : "Desconhecido";
+                atendimentosPorMes[mes] = (atendimentosPorMes[mes] || 0) + 1;
+
+                // Tipos de Serviço
+                tiposDeServico[servico.tipoServico] = (tiposDeServico[servico.tipoServico] || 0) + 1;
+            });
+
+            // Criando os rankings
+            function criarRanking(dados, elementoId) {
+                const rankingOrdenado = Object.entries(dados).sort((a, b) => b[1] - a[1]);
+                const lista = document.getElementById(elementoId);
+                lista.innerHTML = "";
+                rankingOrdenado.forEach(([nome, total]) => {
+                    const item = document.createElement("li");
+                    item.textContent = `${nome}: ${total} serviços`;
+                    lista.appendChild(item);
+                });
             }
 
-            // Preparar dados para o gráfico
-            const labels = Object.keys(atendimentos);
-            const dataValues = Object.values(atendimentos);
+            criarRanking(rankingTecnicos, "rankingGeral");
+            criarRanking(tiposDeServico, "rankingPorTipo");
 
-            const dadosAtendimentos = {
-                labels: labels,
-                datasets: [{
-                    label: "Atendimentos Realizados",
-                    data: dataValues,
-                    backgroundColor: ["red", "blue", "green", "orange", "purple"]
-                }]
-            };
-
-            // Criar o gráfico
-            const ctx = document.getElementById("graficoAtendimentos").getContext("2d");
-            new Chart(ctx, {
-                type: "bar",
-                data: dadosAtendimentos,
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
+            // Criando os gráficos
+            function criarGrafico(id, tipo, labels, data, titulo) {
+                const ctx = document.getElementById(id).getContext("2d");
+                new Chart(ctx, {
+                    type: tipo,
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: titulo,
+                            data: data,
+                            backgroundColor: ["red", "blue", "green", "orange", "purple", "yellow"]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                suggestedMin: 0,
+                                suggestedMax: Math.ceil((Math.max(...data) || 200) / 100) * 100
+                            }
+                        },
+                        plugins: { legend: { display: true } }
                     }
-                }
-            });
+                });
+            }
+
+            criarGrafico("graficoAtendimentosPorTecnico", "bar", Object.keys(atendimentosPorTecnico), Object.values(atendimentosPorTecnico), "Atendimentos por Técnico");
+            criarGrafico("graficoStatusAtendimentos", "pie", Object.keys(statusAtendimentos), Object.values(statusAtendimentos), "Status dos Atendimentos");
+            criarGrafico("graficoAtendimentosPorMes", "line", Object.keys(atendimentosPorMes).sort(), Object.values(atendimentosPorMes), "Atendimentos por Mês");
+            criarGrafico("graficoTiposDeServico", "doughnut", Object.keys(tiposDeServico), Object.values(tiposDeServico), "Tipos de Serviço");
         });
     </script>
 
