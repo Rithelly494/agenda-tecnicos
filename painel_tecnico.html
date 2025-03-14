@@ -10,16 +10,16 @@
             background-color: #f4f4f4;
             margin: 0;
             padding: 0;
-            text-align: center;
         }
         .container {
             width: 100%;
-            max-width: 600px;
+            max-width: 400px;
             margin: auto;
             background: white;
-            padding: 10px;
+            padding: 15px;
             border-radius: 10px;
             box-shadow: 0px 0px 10px #ccc;
+            text-align: center;
         }
         .servico-item {
             border: 1px solid #ccc;
@@ -43,11 +43,13 @@
         .button:hover {
             background: #E65C00;
         }
-        select {
+        .status-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        .status-buttons button {
+            flex: 1;
             padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            width: 100%;
             font-size: 14px;
         }
     </style>
@@ -63,7 +65,7 @@
     <script>
         function carregarServicosTecnico() {
             let servicos = JSON.parse(localStorage.getItem("servicos")) || [];
-            let tecnicoAtual = "Bruno"; // Defina o técnico logado (pode vir de login futuramente)
+            let tecnicoAtual = "Bruno"; // Defina o técnico logado (pode vir do login futuramente)
             let listaServicos = document.getElementById("listaServicosTecnico");
             listaServicos.innerHTML = "";
 
@@ -81,13 +83,12 @@
                     <strong>${servico.tipoServico}</strong><br>
                     Cliente: ${servico.cliente}<br>
                     Veículo: ${servico.modelo} (${servico.ano})<br>
-                    Status: <select onchange="atualizarStatus(${index}, this.value)">
-                        <option value="Pendente" ${servico.status === "Pendente" ? "selected" : ""}>Pendente</option>
-                        <option value="Em andamento" ${servico.status === "Em andamento" ? "selected" : ""}>Em andamento</option>
-                        <option value="Concluído" ${servico.status === "Concluído" ? "selected" : ""}>Concluído</option>
-                        <option value="Cancelado" ${servico.status === "Cancelado" ? "selected" : ""}>Cancelado</option>
-                    </select><br>
-                    ${servico.tipoEndereco === "link" ? `<a href="${servico.endereco.linkLocalizacao}" target="_blank" class="button">Ver Localização</a>` : ""}
+                    Status: ${servico.status}<br>
+                    ${servico.tipoEndereco === "link" ? `<a href="${servico.endereco.linkLocalizacao}" target="_blank" class="button">Ver Localização</a><br>` : ""}
+                    <div class="status-buttons">
+                        <button class="button" onclick="atualizarStatus(${index}, 'Concluído')">✔ Realizado</button>
+                        <button class="button" onclick="atualizarStatus(${index}, 'Não Realizado')">❌ Não Realizado</button>
+                    </div>
                 `;
                 listaServicos.appendChild(div);
             });
